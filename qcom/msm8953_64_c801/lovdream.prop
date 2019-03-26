@@ -1,0 +1,144 @@
+#
+# HY property
+#
+ro.hw_version=C801_V1.00_PCB
+ro.build.display.id=C801_V1.0
+ro.product.ui_model=C801
+ro.product.wifi_ssid=C801
+ro.product.wifi.p2p.name=C801
+ro.product.bluetooth_name=C801
+ro.product.brand=C801
+ro.product.manufacturer=C801
+ro.build.inter_version=msm8953_C801P_V0_01_20190220_userdebug
+ro.product.fullmodel=C801
+ro.product.uafullmodel=C801
+ro.product.manufacturer_code=C801
+ro.product.model=C801
+ro.device.model=C801
+ro.product.operator=CT
+ro.product.name=C801
+ro.product.device=C801
+#ro.product.option=cts
+#o.product.option=ct
+#o.product.ct=1
+#ro.product.cta=1
+#ro.product.nolightsensor=1
+#o.product.nodistancesensor=0
+#ro.product.tpinsteadsensor=1
+#ro.product.fastbrightness=1
+ro.product.nofm=0
+ro.product.compass=1
+ro.product.hasbuttonlight=1
+ro.product.twocolorlights=1
+#ro.product.gyrosensor=1
+ro.product.nfc=true
+#ro.product.funskey=1
+#ro.product.breathing_light=1
+#ro.product.hottf=1
+ro.product.otg=1
+ro.product.eightpinotg=1
+#ro.product.eightpin = 1
+#ro.product.fourteenpin = 0
+#ro.product.backcharging=0
+#ro.product.norecerver=1
+ro.product.backmic=1
+#ro.product.resetkey=1
+#ro.product.cts=1
+ro.product.5gwifi=1
+#ro.product.low_mem_size=50
+#ro.product.min_mem_size=30
+#ro.product.hall=0
+#ro.product.imei_sv=01
+#ro.product.barometer=0
+#persist.fm.sinrth=1
+#persist.fm.sinrsampales=50
+
+#
+# HY property
+#
+
+# Moved from vendor spec.default.prop by zhiyu
+# Set the default build as ssss
+persist.radio.multisim.config=ssss
+
+# Set the default spec as Default
+#persist.env.spec=ChinaTelecom 
+#ro.config.ringtone=Pyxis.ogg
+#ro.config.ringtone_2=Pyxis.ogg
+#ro.config.notification_sound=Drip.ogg
+#ro.config.message_sound_card1=Drip.ogg
+#ro.config.message_sound_card2=Drip.ogg
+#ro.config.alarm_alert=Argon.ogg
+#set camera modle and make
+persist.camera.exiftagid.make=C801
+persist.camera.exiftagid.model=C801
+#ro.camera.fullcountsound=1
+
+#ro.com.android.mobiledata=true
+
+gsm.version.baseband=MSM8953
+#ro.com.android.dataroaming=false
+#ro.product.rom.size=17179869184
+
+#ro.config.doublescreen=1
+
+# default language
+persist.sys.language=zh
+persist.sys.country=CN
+
+# default timezone
+persist.sys.timezone=Asia/Shanghai
+#persist.sys.confirm.timezone=Europe/London
+persist.radio.mode_pref_nv10=1
+
+
+#persist.sys.isUsbOtgEnabled=true
+
+#wangqing.yu add for Beidou GPS
+#persist.sys.location.bd.mode=2
+#persist.sys.output.nmea=0
+#persist.sys.location.beidou=1
+#persist.sys.bd.sbas=1
+#persist.sys.bd.dynamode=61
+#persist.sys.bd.galileo=1
+#persist.sys.bd.augmentation=111110
+#add by zzj
+#persist.sys.ublox=1
+#wangqing.yu add for u-blox fw info
+#persist.sys.ublox.num=null
+#persist.sys.ublox.hw=null
+#persist.sys.ublox.ext=null
+#persist.sys.ublox.rom=null
+#persist.sys.ublox.fwver=null
+#persist.sys.ublox.protver=null
+#persist.sys.ublox.rate=2
+
+#xiaciping add for 7+5 mode
+#persist.radio.primary_7_5_mode=true
+
+#wangqing.yu add for qualcomm GPS
+persist.sys.location.qualcomm=1
+persist.sys.output.nmea=0
+#persist.sys.location.beidou=1
+#persist.sys.bd.sbas=1
+
+#heliang add for nobt nowifi feature
+ro.product.nowifi=0
+ro.product.nobt=0
+persist.sys.phone.def.disable=true
+
+#add by Zemel 20170904 for bug 15692
+persist.sys.focus.network=true
+
+#add by Zemel 20170914 for bug 15682
+persist.sys.hvdcp.disable=true
+#add by Zemel 20180123 for bug 16283
+persist.speaker.autoEnable=true
+#add by Zemel for bug 16369
+ro.build.characteristics=tablet
+ro.build.support_earpiece=false
+persisit.support.menu_lock_task=true
+persisit.support.broadcast_key=true
+
+#add by fuying for ublox version
+#persist.sys.ublox.version=0
