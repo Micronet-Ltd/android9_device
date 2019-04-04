@@ -90,7 +90,7 @@ PRODUCT_DEVICE := msm8953_64_c801
 PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 0.0.0.1
+PRODUCT_VER    := 0.0.0.2
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
 BUILD_NUMBER   := $(shell echo $${USER:0:8}).$(PRODUCT_MODEL)_$(PRODUCT_VER)_$(shell $(PRODUCT_DT) +%Y%m%d.%H%M)
@@ -385,3 +385,5 @@ ifeq ($(strip $(TARGET_KERNEL_VERSION)), 3.18)
 endif
 PRODUCT_COPY_FILES += \
     device/qcom/msm8953_64_c801/mixer_paths_mtp.xml:vendor/etc/mixer_paths_mtp.xml 
+PRODUCT_PACKAGES += iodriver recovery.iodriver
+PRODUCT_PACKAGES += bootanimation.zip

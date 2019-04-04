@@ -279,3 +279,5 @@ endif
 TARGET_ENABLE_MEDIADRM_64 := true
 
 CAM_C801 := true
+
+PRODUCT_DEFAULT_DEV_CERTIFICATE :=build/target/product/security/c801/releasekey
