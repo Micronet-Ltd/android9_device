@@ -32,3 +32,10 @@ r_dir_file(shell, RIDL_data_file)
 # allow read access for shell
 r_dir_file(shell, qti_logkit_priv_data_file)
 r_dir_file(shell, qti_logkit_pub_data_file)
+
+#allow shell sysfs_leds:dir rw_dir_perms;
+#allow shell sysfs_leds:file rw_file_perms;
+allow shell sysfs_leds:lnk_file read;
+
+allow shell hw_build_version_mcu:property_service set;
+allow shell hw_build_version_fpga:property_service set;
