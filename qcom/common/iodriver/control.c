@@ -91,7 +91,6 @@ static int control_get_status_message(char * buff, size_t size)
 	return 0;
 }
 
-
 static int control_open_socket(struct control_thread_context * context __attribute__((unused)))
 {
 	struct sockaddr_un s_addr = {0};
@@ -295,7 +294,40 @@ static int control_one_wire_data(struct control_thread_context * context, uint8_
 	return 0;
 }
 
-static int control_frame_process(struct control_thread_context * context, uint8_t * data, size_t len)
+
+static inline retrieve_gpio_value_to_control(struct control_thread_context *context, uint8_t value)
+{
+	if (context->gpio_fd >= 0)
+	{
+		int r;
+		uint8_t data[4] = {0, 0, 0, 0};
+		data[2] = value;
+
+		// The driver should never block, or return -EAGAIN, if the driver changes
+		// this will need to be updated. NOTE: this can not block, so take care
+		DTRACE("%s [%x]", __func__, value);
+		r = write(context->gpio_fd, data, sizeof(data));
+		if (r != sizeof(data))
+		{
+			DTRACE("%s: write error", __func__);
+			if (-1 == r && -EAGAIN == errno)
+				DTRACE("%s:EAGAIN should not happen", __func__);
+			else if (-1 == r && -EACCES == errno)
+				DTRACE("%s: EACCES memory is likely corrupted", __func__);
+			else if (-1 == r && -EINVAL == errno)
+				DTRACE("%s: EINVAL data is invalid", __func__);
+			else if (-1 == r)
+			{
+				DERR("%s: write: %s", __func__, strerror(errno));
+				return r;
+			}
+			DTRACE("%s: r = %d", __func__, r);
+		}
+	}
+	return 0;
+}
+
+static int control_frame_process(struct control_thread_context *context, uint8_t *data, size_t len)
 {
 	// NOTE: Do not block here.
 	// TODO: check for sequence gaps
@@ -339,6 +371,10 @@ static int control_frame_process(struct control_thread_context * context, uint8_
 			else if(true == context->dont_send)
 			{
 				context->dont_send = false;
+			}
+			else if(MAPI_GET_MCU_GPIO_STATE_DBG == data[0])
+			{
+				retrieve_gpio_value_to_control(context,data[2]);
 			}
 			else
 			{
@@ -724,23 +760,51 @@ static int control_handle_api_command(struct control_thread_context * context, s
 static int control_receive_gpio(struct control_thread_context * context)
 {
 	int r;
-	uint8_t data[4];
-	uint8_t msg[4];
+	uint8_t data[6]; //Barak - as for now 31/3/2019, 6 is the maximal possible message size
+	uint8_t msg[6];
+	uint8_t size;
 
 	msg[0] = control_get_seq(context);
-	msg[1] = (uint8_t)GPIO_INT_STATUS;
 
 	r = read(context->gpio_fd, data, sizeof(data));
 
-	if(-1 == r)
+	if (-1 == r)
 	{
 		DERR("read: %s", strerror(errno));
 		return -1;
 	}
-	msg[2] = data[2];
-	msg[3] = data[3];
 
-	return control_send_mcu(context, msg, sizeof(msg));
+	switch (msg[1])
+	{
+		case GPIO_INT_STATUS:
+			size = 4;
+			msg[2] = data[2];
+			msg[3] = data[3];
+			break;
+
+		case COMM_READ_REQ:
+			size = 5;
+			msg[2] = (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG;/*COMM_GET_MCU_GPIO_STATE_DBG in the MCU*/
+			msg[3] = data[3];
+			msg[4] = data[4];
+			break;
+
+		case COMM_WRITE_REQ:
+			size = 6;
+			msg[2] = (uint8_t)MAPI_SET_MCU_GPIO_STATE_DBG; /*COMM_SET_MCU_GPIO_STATE_DBG in the MCU*/
+			msg[3] = data[3];
+			msg[4] = data[4];
+			msg[5] = data[5];
+			break;
+
+		default:
+			return 1;
+			break; //should never get here
+	}
+
+	DERR("read message: %u %u %u %u\n", data[0], data[1], data[2], data[3]);
+
+	return control_send_mcu(context, msg, size);
 }
 
 #define LED_DAT_LEN 5
