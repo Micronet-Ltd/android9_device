@@ -41,7 +41,7 @@ hal_client_domain(platform_app, hal_scve)
 get_prop(platform_app, vendor_mpctl_prop)
 
 allow platform_app sysfs_switch_dock:file rw_file_perms;
-#allow platform_app sysfs_switch_dock:dir rw_dir_perms;
+allow platform_app sysfs_switch_dock:dir { search };
 allow platform_app sysfs_switch_dock:lnk_file r_file_perms;
  
 allow platform_app sysfs_vinputs:file r_file_perms;
