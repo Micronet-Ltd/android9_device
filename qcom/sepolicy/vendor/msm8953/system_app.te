@@ -27,3 +27,9 @@
 
 #for regionalization
 r_dir_file(system_app, vendor_carrier_file);
+
+allow system_app sysfs_vinputs:file r_file_perms;
+allow system_app sysfs_vinputs:dir r_dir_perms;
+allow system_app sysfs_vinputs:lnk_file r_file_perms;
+
+
