@@ -767,31 +767,38 @@ static int control_receive_gpio(struct control_thread_context * context)
 	msg[0] = control_get_seq(context);
 
 	r = read(context->gpio_fd, data, sizeof(data));
+	//DERR("read GPIO");
 
 	if (-1 == r)
 	{
 		DERR("read: %s", strerror(errno));
 		return -1;
 	}
+	//DERR("read DATA1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 
-	switch (msg[1])
+	switch (data[1])
 	{
 		case GPIO_INT_STATUS:
 			size = 4;
+			msg[1] = data[1];
 			msg[2] = data[2];
 			msg[3] = data[3];
 			break;
 
 		case COMM_READ_REQ:
 			size = 5;
-			msg[2] = (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG;/*COMM_GET_MCU_GPIO_STATE_DBG in the MCU*/
+			msg[1] = data[1];
+			msg[2] = MAPI_GET_MCU_GPIO_STATE_DBG;/*COMM_GET_MCU_GPIO_STATE_DBG in the MCU*/
 			msg[3] = data[3];
 			msg[4] = data[4];
+			//DERR("read DATA1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
+			//DERR("read message1: %u %u %u %u %u enum %u	\n", msg[0], msg[1], msg[2], msg[3], msg[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 			break;
 
 		case COMM_WRITE_REQ:
 			size = 6;
-			msg[2] = (uint8_t)MAPI_SET_MCU_GPIO_STATE_DBG; /*COMM_SET_MCU_GPIO_STATE_DBG in the MCU*/
+			msg[1] = data[1];
+			msg[2] = MAPI_SET_MCU_GPIO_STATE_DBG; /*COMM_SET_MCU_GPIO_STATE_DBG in the MCU*/
 			msg[3] = data[3];
 			msg[4] = data[4];
 			msg[5] = data[5];
@@ -801,8 +808,7 @@ static int control_receive_gpio(struct control_thread_context * context)
 			return 1;
 			break; //should never get here
 	}
-
-	DERR("read message: %u %u %u %u\n", data[0], data[1], data[2], data[3]);
+	DERR("read message1: %u %u %u %u %u enum %u	\n", msg[0], msg[1], msg[2], msg[3], msg[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 
 	return control_send_mcu(context, msg, size);
 }
