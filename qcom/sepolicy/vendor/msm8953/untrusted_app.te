@@ -26,5 +26,5 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-allow untrusted_app chr_file_ttyhs0:chr_file rw_file_perms;
+allow untrusted_app serial_device_hs0:chr_file rw_file_perms;
 

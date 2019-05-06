@@ -29,4 +29,4 @@
 allow platform_app oemfs:lnk_file { read getattr };
 
 
-allow platform_app chr_file_ttyhs0:chr_file rw_file_perms;
+allow platform_app serial_device_hs0:chr_file rw_file_perms;

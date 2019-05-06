@@ -27,5 +27,3 @@
 
 #sysfs emmc dload type
 type sysfs_emmc_dload, sysfs_type, fs_type;
-type chr_file_ttyhs0, dev_type, mlstrustedobject;
-
