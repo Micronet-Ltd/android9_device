@@ -19,7 +19,9 @@ endif
 
 DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8953_64_c801/overlay
 
-TARGET_USES_NQ_NFC := true
+TARGET_USES_NQ_NFC := false
+
+
 
 ifneq ($(wildcard kernel/msm-3.18),)
     TARGET_KERNEL_VERSION := 3.18
@@ -84,6 +86,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
            vendor.vidc.disable.split.mode=1
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
+
+#add by zzj for GMS
+$(call inherit-product, vendor/google/products/gms.mk )
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.com.google.clientidbase=android-google
+#add by zzj for GMS
 
 PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
@@ -325,6 +333,9 @@ ifeq ($(ENABLE_VENDOR_IMAGE), true)
 KMGK_USE_QTI_SERVICE := true
 endif
 
+#add by shaozhaochuang MSM Thermal  Balancer configuration file
+PRODUCT_COPY_FILES += \
+    device/qcom/msm8953_64_c801/thermal-engine.conf:vendor/etc/thermal-engine.conf
 #Enable AOSP KEYMASTER and GATEKEEPER HIDLs
 ifneq ($(KMGK_USE_QTI_SERVICE), true)
 PRODUCT_PACKAGES += android.hardware.gatekeeper@1.0-impl \
@@ -384,6 +395,17 @@ ifeq ($(strip $(TARGET_KERNEL_VERSION)), 3.18)
     PRODUCT_PACKAGES += vendor-extra-libs
 endif
 PRODUCT_COPY_FILES += \
-    device/qcom/msm8953_64_c801/mixer_paths_mtp.xml:vendor/etc/mixer_paths_mtp.xml 
+    device/qcom/msm8953_64_c801/mixer_paths_mtp.xml:vendor/etc/mixer_paths_mtp.xml
+
+
+-include $(TOPDIR)vendor/nxp/pn8xt/device-nfc.mk
+
+#interage widewine L3 by zzj start
+PRODUCT_PROPERTY_OVERRIDES += drm.service.enabled=true
+PRODUCT_PACKAGES += com.google.widevine.software.drm.xml \
+com.google.widevine.software.drm
+PRODUCT_PACKAGES += libwvdrmengine
+#interage widewine L3 by zzj end
+
 PRODUCT_PACKAGES += iodriver recovery.iodriver
 PRODUCT_PACKAGES += bootanimation.zip
