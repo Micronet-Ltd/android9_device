@@ -80,6 +80,9 @@ persist.sys.phone.def.disable=true
 #add by Zemel 20170904 for bug 15692
 persist.sys.focus.network=true
 
+persist.sys.at.cit=false
+sys.cit_keytest=false
+
 #add by Zemel 20170914 for bug 15682
 persist.sys.hvdcp.disable=true
 #add by Zemel 20180123 for bug 16283
