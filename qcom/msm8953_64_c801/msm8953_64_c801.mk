@@ -87,18 +87,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
 
-#add by zzj for GMS
-$(call inherit-product, vendor/google/products/gms.mk )
-PRODUCT_PROPERTY_OVERRIDES += \
-ro.com.google.clientidbase=android-google
-#add by zzj for GMS
+PRODUCT_GMS_COMMON ?= false
 
 PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
 PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 0.0.4.0
+PRODUCT_VER    := 0.1.0.0
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
 BUILD_NUMBER   := $(shell echo $${USER:0:8}).$(PRODUCT_MODEL)_$(PRODUCT_VER)_$(shell $(PRODUCT_DT) +%Y%m%d.%H%M)
