@@ -280,4 +280,15 @@ TARGET_ENABLE_MEDIADRM_64 := true
 
 CAM_C801 := true
 
+#interage widewine by zzj start
+BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 3
+#interage widewine by zzj end
+# add gms package by zzj 
+#add by zzj for GMS
+ifeq ($(PRODUCT_GMS_COMMON),true)
+$(call inherit-product, vendor/google/products/gms.mk )
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.com.google.clientidbase=android-google
+#add by zzj for GMS
+endif
 PRODUCT_DEFAULT_DEV_CERTIFICATE :=build/target/product/security/c801/releasekey
