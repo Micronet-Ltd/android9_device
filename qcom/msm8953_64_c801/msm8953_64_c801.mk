@@ -87,7 +87,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
 
-PRODUCT_GMS_COMMON := true
+#add by zzj for GMS
+ifeq ($(PRODUCT_GMS_COMMON),true)
+$(call inherit-product, vendor/google/products/gms.mk )
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.com.google.clientidbase=android-google
+#add by zzj for GMS
+endif
 
 PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
