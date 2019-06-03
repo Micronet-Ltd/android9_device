@@ -28,3 +28,7 @@
 #sysfs emmc dload type
 type sysfs_emmc_dload, sysfs_type, fs_type;
 type sysfs_gpwd, sysfs_type, fs_type, mlstrustedobject;
+
+
+type device_tty_mic, dev_type, fs_type, mlstrustedobject;
+
