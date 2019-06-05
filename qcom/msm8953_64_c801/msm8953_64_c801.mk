@@ -87,10 +87,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
 
-#add by zzj for GMS
-PRODUCT_GMS_COMMON := true
+PRODUCT_GMS_COMMON ?= false
 ifeq ($(PRODUCT_GMS_COMMON),true)
 $(warning "Building GMS version.")
+#add by zzj for GMS
 $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.com.google.clientidbase=android-google
