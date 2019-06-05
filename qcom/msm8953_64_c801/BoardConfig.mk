@@ -284,5 +284,5 @@ CAM_C801 := true
 BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 3
 #interage widewine by zzj end
 # add gms package by zzj 
-PRODUCT_GMS_COMMON := true
+PRODUCT_GMS_COMMON ?= false
 PRODUCT_DEFAULT_DEV_CERTIFICATE :=build/target/product/security/c801/releasekey
