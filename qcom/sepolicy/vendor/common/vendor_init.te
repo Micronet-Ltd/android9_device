@@ -102,3 +102,4 @@ allow vendor_init ipa_dev:file create_file_perms;
 
 allow vendor_init qti-manifest_exec:file entrypoint;
 allow vendor_init vendor_toolbox_exec:file rx_file_perms;
+allow vendor_init { system_file }:system module_load;
