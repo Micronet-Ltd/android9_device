@@ -93,4 +93,5 @@
 /sys/devices/soc/soc:watchdogpin(/.*)?				    u:object_r:sysfs_gpwd:s0
 
 /dev/ttyACM4							    u:object_r:device_tty_mic:s0
-
+/dev/ttyUSB0							    u:object_r:device_tty_mic:s0
+/dev/ttyUSB1							    u:object_r:device_tty_mic:s0
