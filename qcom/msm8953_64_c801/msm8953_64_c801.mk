@@ -94,6 +94,11 @@ $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.com.google.clientidbase=android-google
+
+# set media volume to default 70%
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.config.media_vol_default=10
+
 #add by zzj for GMS
 endif
 
