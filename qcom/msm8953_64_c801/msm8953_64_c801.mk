@@ -94,6 +94,11 @@ $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.com.google.clientidbase=android-google
+
+# set media volume to default 70%
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.config.media_vol_default=10
+
 #add by zzj for GMS
 endif
 
@@ -102,7 +107,7 @@ PRODUCT_DEVICE := msm8953_64_c801
 PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 0.1.0.0
+PRODUCT_VER    := 0.1.1.0
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
 BUILD_NUMBER   := $(shell echo $${USER:0:8}).$(PRODUCT_MODEL)_$(PRODUCT_VER)_$(shell $(PRODUCT_DT) +%Y%m%d.%H%M)
