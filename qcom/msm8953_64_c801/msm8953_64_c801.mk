@@ -106,8 +106,17 @@ PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
 PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
+PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
+ifeq ($(PRODUCT_VARIANT),smartcam)
+#PRODUCT_MODEL  := MSSC
+PRODUCT_MODEL  := MSTab8
+PRODUCT_VER    := 1.0.0.0
+PRODUCT_VARIANT := smartcam
+else
 PRODUCT_MODEL  := MSTab8
 PRODUCT_VER    := 0.1.0.4
+PRODUCT_VARIANT :=
+endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
 BUILD_NUMBER   := $(shell echo $${USER:0:8}).$(PRODUCT_MODEL)_$(PRODUCT_VER)_$(shell $(PRODUCT_DT) +%Y%m%d.%H%M)

@@ -22,9 +22,17 @@ endif
 ifeq ($(KERNEL_DEFCONFIG),)
     ifneq ($(wildcard kernel/msm-3.18),)
         ifeq ($(TARGET_BUILD_VARIANT),user)
-          KERNEL_DEFCONFIG := msm8953_64_c801-perf_defconfig
+	    ifeq ($(PRODUCT_VARIANT),smartcam)
+		KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
+	    else
+		KERNEL_DEFCONFIG := msm8953_64_c801-perf_defconfig
+	    endif
         else
-          KERNEL_DEFCONFIG := msm8953_64_c801_defconfig
+	    ifeq ($(PRODUCT_VARIANT),smartcam)
+		KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
+	    else
+		KERNEL_DEFCONFIG := msm8953_64_c801_defconfig
+	    endif
         endif
     else ifneq ($(wildcard kernel/msm-4.9),)
         ifeq ($(TARGET_BUILD_VARIANT),user)
