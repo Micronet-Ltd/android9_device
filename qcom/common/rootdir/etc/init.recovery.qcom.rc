@@ -25,6 +25,10 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+on boot
+chown system system /dev/ttyHS0
+chmod 0664 /dev/ttyHS0
+
 on init
     write /dev/kmsg "init.recovery.qcom.rc on init"
     write /sys/class/backlight/panel0-backlight/brightness 200
@@ -75,5 +79,5 @@ service mcu_ua /sbin/mcu_ua
     disabled
 
 service iodriver /sbin/iodriver
-    seclabel u:r:recovery:s0
+    seclabel u:r:iodriver:s0
     oneshot
