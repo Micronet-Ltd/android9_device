@@ -114,9 +114,7 @@ PRODUCT_VER    := 1.0.0.0
 PRODUCT_VARIANT := smartcam
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 0.1.0.4
-PRODUCT_VARIANT :=
-endif
+PRODUCT_VER    := 00.1.2.2
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
 BUILD_NUMBER   := $(shell echo $${USER:0:8}).$(PRODUCT_MODEL)_$(PRODUCT_VER)_$(shell $(PRODUCT_DT) +%Y%m%d.%H%M)
