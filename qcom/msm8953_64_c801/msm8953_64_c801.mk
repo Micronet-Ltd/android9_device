@@ -83,6 +83,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
            dalvik.vm.heapminfree=4m \
            dalvik.vm.heapstartsize=16m \
+	   persist.audio.fluence.speaker=false \
            vendor.vidc.disable.split.mode=1
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
@@ -95,13 +96,14 @@ $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.com.google.clientidbase=android-google
 
-# set media volume to default 70%
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.config.media_vol_default=10
 
 #add by zzj for GMS
 endif
 
+# set media volume to default 70%
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.config.media_vol_default=10
+	
 PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
 PRODUCT_BRAND := Android
