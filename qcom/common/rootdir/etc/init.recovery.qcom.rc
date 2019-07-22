@@ -26,8 +26,8 @@
 #
 
 on boot
-chown system system /dev/ttyHS0
-chmod 0664 /dev/ttyHS0
+chown system system /dev/ttyHSL1
+chmod 0664 /dev/ttyHSL1
 
 on init
     write /dev/kmsg "init.recovery.qcom.rc on init"
