@@ -29,7 +29,7 @@ ifeq ($(KERNEL_DEFCONFIG),)
 	    endif
         else
 	    ifeq ($(PRODUCT_VARIANT),smartcam)
-		KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
+		KERNEL_DEFCONFIG := msm8953_64_c801_sc-defconfig
 	    else
 		KERNEL_DEFCONFIG := msm8953_64_c801_defconfig
 	    endif

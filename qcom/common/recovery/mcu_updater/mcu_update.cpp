@@ -528,7 +528,7 @@ int main(int argc, char **argv)
     char const *recovery_list_sd = "/sdcard/recovery-list.txt";
     char const *recovery_list_c = "/cache/recovery-list.txt";
     char *mcu_srec, *sta, *er;
-    char const *tty_n = "/dev/ttyHS0";
+    char const *tty_n = "/dev/ttyHSL1";
     char s_rec[64], resp[64], rev[32];
     uint8_t flash_page[260];
     time_t start = time(0);
