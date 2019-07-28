@@ -121,7 +121,7 @@ else
 endif
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 11.0.0.0
+PRODUCT_VER    := 01.2.0.0
 endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
