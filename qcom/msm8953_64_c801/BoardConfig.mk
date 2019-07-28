@@ -283,4 +283,9 @@ CAM_C801 := true
 #interage widewine by zzj start
 BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 3
 #interage widewine by zzj end
+
+#add by heliang 20190708
+TARGET_NO_QTI_APP := true
+
+#add by heliang for releasekey
 PRODUCT_DEFAULT_DEV_CERTIFICATE :=build/target/product/security/c801/releasekey

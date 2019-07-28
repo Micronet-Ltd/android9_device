@@ -33,6 +33,9 @@ allow qti_init_shell vm_bms_device:chr_file getattr;
 
 allow qti_init_shell gpu_device:chr_file getattr;
 
+#add by xxf
+allow qti_init_shell system_prop:property_service set;
+
 # for insmod of iris ko, this is needed.
 # needed by most of the services
 # fowner and fsetid are needed for chmod display nodes.
@@ -207,15 +210,18 @@ allow qti_init_shell fm_qsoc_patches_exec:file rx_file_perms;
 allow qti_init_shell {
     sysfs_battery_supply
     sysfs_usb_supply
+    sysfs_usbpd_device
 }:dir r_dir_perms;
 
 allow qti_init_shell {
     sysfs_battery_supply
     sysfs_usb_supply
+    sysfs_usbpd_device
 }:file rw_file_perms;
 
 allow qti_init_shell sysfs_battery_supply:file setattr;
 allow qti_init_shell sysfs_usb_supply:file setattr;
+allow qti_init_shell sysfs_usbpd_device:file setattr;
 
 allow qti_init_shell sysfs_fm:file rw_file_perms;
 

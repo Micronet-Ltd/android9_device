@@ -102,9 +102,8 @@ on boot
     mkdir /dev/usb-ffs/adb 0770 shell system
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=1000,rmode=0770,fmode=0660
     write /sys/class/android_usb/android0/f_ffs/aliases adb
+    setprop sys.usb.mtp.device_type 2
     setprop vendor.usb.controller ${sys.usb.controller}
-
-on load_persist_props_action
     enable vendor.qcom-usb-sh
 
 service vendor.qcom-usb-sh /vendor/bin/init.qcom.usb.sh
@@ -178,6 +177,15 @@ on property:sys.usb.config=diag,serial_tty,serial_smd && property:sys.usb.config
     write /sys/class/android_usb/android0/functions diag,serial
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
+    
+#add by xxf
+service lov_search_broad  /vendor/bin/sh /vendor/bin/lov_search_broad.sh
+	disabled
+	oneshot
+on property:persist.sys.lov.broad=1
+	start lov_search_broad
+	
+#add by xxf	
 
 on property:sys.usb.config=diag,serial_tty,serial_smd,adb && property:sys.usb.configfs=0
     write /sys/class/android_usb/android0/enable 0
