@@ -89,7 +89,7 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
 
 #add by zzj for GMS
-PRODUCT_GMS_COMMON := false
+PRODUCT_GMS_COMMON := true
 ifeq ($(PRODUCT_GMS_COMMON),true)
 $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
@@ -112,7 +112,7 @@ PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 #PRODUCT_MODEL  := MSSC
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 10.0.0.0
+PRODUCT_VER    := 10.2.0.0
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -121,7 +121,7 @@ else
 endif
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 00.2.0.0
+PRODUCT_VER    := 01.2.0.0
 endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
