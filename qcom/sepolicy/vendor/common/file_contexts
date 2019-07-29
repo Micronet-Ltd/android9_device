@@ -35,7 +35,7 @@
 /dev/smem_log                                   u:object_r:smem_log_device:s0
 /dev/ttyHSL0                                    u:object_r:console_device:s0
 /dev/ttyMSM0                                    u:object_r:console_device:s0
-/dev/ttyHS[0-9]*                                u:object_r:serial_device:s0
+/dev/ttyHS[1-9]*                                u:object_r:serial_device:s0
 /dev/ttyGS0                                     u:object_r:gadget_serial_device:s0
 /dev/usb_ext_chg                                u:object_r:hvdcp_device:s0
 /dev/media([0-9])+                              u:object_r:video_device:s0
@@ -352,6 +352,7 @@
 /sys/class/thermal(/.*)?                                            u:object_r:sysfs_thermal:s0
 /sys/class/sensors(/.*)?                                            u:object_r:sysfs_sensors:s0
 /sys/class/uio(/.*)?                                                u:object_r:sysfs_uio:s0
+/sys/class/switch(/.*)?                                             u:object_r:sysfs_switch_dock:s0
 /sys/devices(/platform)?/soc/[a-f0-9]+.qcom,rmtfs_sharedmem/uio/uio[0-9]+(/.*)?        u:object_r:sysfs_uio_file:s0
 /sys/devices(/platform)?/soc/[a-f0-9]+.qcom,rmtfs_sharedmem/uio/uio[0-9]+/maps/map[0-9]+(/.*)?    u:object_r:sysfs_uio_file:s0
 /sys/devices(/platform)?/soc.0/[a-f0-9]+.qcom,rmtfs_sharedmem/uio/uio[0-9]+(/.*)?        u:object_r:sysfs_uio_file:s0
@@ -395,6 +396,7 @@
 /sys/devices/virtual/smdpkt/smdcntl1[0-9]/open_timeout              u:object_r:sysfs_smd_open_timeout:s0
 /sys/devices/virtual/smdpkt/smdcntl[0-9]/open_timeout               u:object_r:sysfs_smd_open_timeout:s0
 /sys/devices/virtual/thermal(/.*)?                                  u:object_r:sysfs_thermal:s0
+/sys/devices/virtual/switch(/.*)?                                   u:object_r:sysfs_switch_dock:s0
 /sys/module/msm_serial_hs/parameters/debug_mask                     u:object_r:sysfs_msmuart_file:s0
 /sys/module/msm_thermal(/.*)?                                       u:object_r:sysfs_thermal:s0
 /sys/module/msm_thermal/core_control/cpus_offlined                  u:object_r:sysfs_mpdecision:s0
@@ -458,6 +460,7 @@
 /sys/devices/platform/soc/[a-f0-9]+.qcom,spmi/spmi-0/spmi0-0[0-9]/[a-z0-9]+.qcom,spmi:qcom,[a-z0-9]+@[0-9]:qcom,haptics@c000/leds/vibrator(/.*)?   u:object_r:sysfs_leds:s0
 /sys/devices/platform/soc/ae00000.qcom,mdss_mdp/backlight(/.*)?     u:object_r:sysfs_graphics:s0
 /sys/devices/platform/soc/5e00000.qcom,mdss_mdp/backlight(/.*)?     u:object_r:sysfs_graphics:s0
+/sys/devices/virtual/misc/vinputs(/.*)?				u:object_r:sysfs_vinputs:s0
 /sys/devices/virtual/switch/hdmi(/.*)?                              u:object_r:sysfs_graphics:s0
 /sys/devices(/platform)?/soc/[a-f0-9]+.qcom,mdss_mdp/[a-f0-9]+.qcom,mdss_mdp:qcom,mdss_fb_primary/leds/lcd-backlight(/.*)?   u:object_r:sysfs_graphics:s0
 /sys/devices/soc.0/[a-z0-9]+.qcom,mdss_mdp/qcom,mdss_fb_primary.+[a-z0-9]/leds/lcd-backlight(/.*)?   u:object_r:sysfs_graphics:s0
@@ -754,3 +757,12 @@
 
 #wifilearner daemon
 /(vendor|system/vendor)/bin/wifilearner    u:object_r:wifilearnersvc_exec:s0
+
+##################################
+#Micronet leds
+#
+
+/sys/devices/soc/leds/vled0(/.*)?			u:object_r:sysfs_leds:s0
+/sys/devices/soc/leds/vled1(/.*)?			u:object_r:sysfs_leds:s0
+/sys/devices/soc/leds-qpnp-21/leds/green(/.*)?		u:object_r:sysfs_leds:s0
+/sys/devices/soc/qpnp-smbcharger-18/leds/red(/.*)?	u:object_r:sysfs_leds:s0

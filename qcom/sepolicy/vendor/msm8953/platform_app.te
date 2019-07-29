@@ -27,3 +27,9 @@
 
 #for oemfs
 allow platform_app oemfs:lnk_file { read getattr };
+
+
+allow platform_app serial_device_hs0:chr_file rw_file_perms;
+allow platform_app storage_file:file rw_file_perms;
+allow platform_app storage_file:dir rw_dir_perms;
+allow platform_app device_tty_mic:chr_file rw_file_perms;
