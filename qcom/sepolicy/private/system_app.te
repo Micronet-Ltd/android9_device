@@ -52,4 +52,3 @@ binder_call(system_app, smcinvoke_daemon)
 binder_call(system_app, mirrorlink);
 # allow system app to connect to mirrorlink_socket
 unix_socket_connect(system_app, mirrorlink, mirrorlink);
-
