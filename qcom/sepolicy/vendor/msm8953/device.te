@@ -26,4 +26,4 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 type serial_device_hs0, dev_type, mlstrustedobject;
-
+type device_tty_mic, dev_type, fs_type, mlstrustedobject;

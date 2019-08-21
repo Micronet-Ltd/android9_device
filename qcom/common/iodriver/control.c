@@ -295,12 +295,13 @@ static int control_one_wire_data(struct control_thread_context * context, uint8_
 }
 
 
-static inline retrieve_gpio_value_to_control(struct control_thread_context *context, uint8_t value)
+static inline retrieve_gpio_value_from_mcu(struct control_thread_context *context, uint8_t value)
 {
 	if (context->gpio_fd >= 0)
 	{
 		int r;
-		uint8_t data[4] = {0, 0, 0, 0};
+		uint8_t data[4] = {0, 0, 0, 0};//the reason why I didn't just write a single value is to keep this function
+									   //synchronized with control_gpio_input
 		data[2] = value;
 
 		// The driver should never block, or return -EAGAIN, if the driver changes
@@ -360,28 +361,28 @@ static int control_frame_process(struct control_thread_context *context, uint8_t
 			control_send_mcu(context, data, len);
 			break;
 
-		case COMM_READ_RESP: // register read response
-			DTRACE("COMM_READ_RESPONSE: %x, %x, %x ... %x, %x, len= %d",\
-					data[2], data[3], data[4], data[len -2], data[len-1], (int)len);
-			if (context->rtc_req == true)
-			{
-				memcpy(context->rtc_init_val ,&data[3], sizeof(context->rtc_init_val));
-				context->rtc_req = false;
-			}
-			else if(true == context->dont_send)
-			{
-				context->dont_send = false;
-			}
-			else if(MAPI_GET_MCU_GPIO_STATE_DBG == data[0])
-			{
-				retrieve_gpio_value_to_control(context,data[2]);
-			}
-			else
-			{
-				send_sock_data(context, context->sock_resp_addr, &data[2], len);
-			}
-			context->sock_resp_addr = 0;
-			break;
+	case COMM_READ_RESP: // register read response
+		DERR("COMM_READ_RESPONSE: %x, %x, %x ... %x, %x, len= %d",
+			   data[2], data[3], data[4], data[len - 2], data[len - 1], (int)len);
+		if (context->rtc_req == true)
+		{
+			memcpy(context->rtc_init_val, &data[3], sizeof(context->rtc_init_val));
+			context->rtc_req = false;
+		}
+		else if (true == context->dont_send)
+		{
+			context->dont_send = false;
+		}
+		else if (MAPI_GET_MCU_GPIO_STATE_DBG == data[2])
+		{
+			retrieve_gpio_value_from_mcu(context, data[3]);
+		}
+		else
+		{
+			send_sock_data(context, context->sock_resp_addr, &data[2], len);
+		}
+		context->sock_resp_addr = 0;
+		break;
 
 		case PING_REQ: // PING request
 			{
@@ -760,57 +761,57 @@ static int control_handle_api_command(struct control_thread_context * context, s
 static int control_receive_gpio(struct control_thread_context * context)
 {
 	int r;
+	int err = 0;
+	const uint8_t errsize = 4;
 	uint8_t data[6]; //Barak - as for now 31/3/2019, 6 is the maximal possible message size
-	uint8_t msg[6];
 	uint8_t size;
+	const int GPIO_INT_STATUS_REQ_SIZE = 4;
+	const int COMM_READ_REQ_SIZE = 5;
+	const int COMM_WRITE_REQ_SIZE = 6;
 
-	msg[0] = control_get_seq(context);
+	size = read(context->gpio_fd, data, sizeof(data));
 
-	r = read(context->gpio_fd, data, sizeof(data));
-	//DERR("read GPIO");
+	//DERR("size: %u",size);
 
-	if (-1 == r)
+	if (-1 == size)
 	{
 		DERR("read: %s", strerror(errno));
 		return -1;
 	}
 	//DERR("read DATA1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 
-	switch (data[1])
+	data[0] = control_get_seq(context);
+
+	if(GPIO_INT_STATUS_REQ_SIZE == size)
 	{
-		case GPIO_INT_STATUS:
-			size = 4;
-			msg[1] = data[1];
-			msg[2] = data[2];
-			msg[3] = data[3];
-			break;
-
-		case COMM_READ_REQ:
-			size = 5;
-			msg[1] = data[1];
-			msg[2] = MAPI_GET_MCU_GPIO_STATE_DBG;/*COMM_GET_MCU_GPIO_STATE_DBG in the MCU*/
-			msg[3] = data[3];
-			msg[4] = data[4];
-			//DERR("read DATA1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
-			//DERR("read message1: %u %u %u %u %u enum %u	\n", msg[0], msg[1], msg[2], msg[3], msg[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
-			break;
-
-		case COMM_WRITE_REQ:
-			size = 6;
-			msg[1] = data[1];
-			msg[2] = MAPI_SET_MCU_GPIO_STATE_DBG; /*COMM_SET_MCU_GPIO_STATE_DBG in the MCU*/
-			msg[3] = data[3];
-			msg[4] = data[4];
-			msg[5] = data[5];
-			break;
-
-		default:
-			return 1;
-			break; //should never get here
+		data[1] = (uint8_t)GPIO_INT_STATUS;
 	}
-	DERR("read message1: %u %u %u %u %u enum %u	\n", msg[0], msg[1], msg[2], msg[3], msg[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
+	else if(COMM_READ_REQ_SIZE == size)
+	{
+		data[1] = (uint8_t)COMM_READ_REQ;
+		data[2] = MAPI_GET_MCU_GPIO_STATE_DBG;
+	}
+	else if(COMM_WRITE_REQ_SIZE == size)
+	{
+		data[1] = (uint8_t)COMM_WRITE_REQ;
+		data[2] = MAPI_SET_MCU_GPIO_STATE_DBG;
+	}
+	//DERR("read message1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 
-	return control_send_mcu(context, msg, size);
+	err = control_send_mcu(context, data, size);
+
+	//in case there was an error with the MCU inform the driver
+	//by returning -1 
+	if(0 != err)
+	{
+		data[0] = 0;
+		data[1] = 0;
+		data[2] = -1;
+
+		write(context->gpio_fd, &data[0], errsize);
+	}
+	 
+	return err;
 }
 
 #define LED_DAT_LEN 5
@@ -1415,4 +1416,3 @@ void * control_proc(void * cntx)
 	DERR("control thread exiting");
 	return NULL;
 }
-
