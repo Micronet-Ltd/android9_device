@@ -895,8 +895,8 @@ PRODUCT_PACKAGES := \
     Mms \
     cit.xml \
     FactoryKit \
-    LovdreamDeviceInfo 
-    #QtiDialer \
+    LovdreamDeviceInfo \
+    QtiDialer 
 
 ifeq ($(TARGET_HAS_LOW_RAM),true)
     DELAUN := Launcher3Go
