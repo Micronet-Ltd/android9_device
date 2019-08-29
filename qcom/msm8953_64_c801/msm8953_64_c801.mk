@@ -89,7 +89,7 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
 
 #add by zzj for GMS
-PRODUCT_GMS_COMMON := true
+PRODUCT_GMS_COMMON ?= false
 ifeq ($(PRODUCT_GMS_COMMON),true)
 $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
@@ -121,7 +121,7 @@ else
 endif
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 01.2.0.0
+PRODUCT_VER    := 00.2.0.1
 endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
