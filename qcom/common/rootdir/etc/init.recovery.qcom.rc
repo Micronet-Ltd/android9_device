@@ -69,6 +69,7 @@ on fs
 
     write /sys/class/leds/vled0/trigger none
     write /sys/class/leds/vled1/trigger none
+    write /sys/class/leds/aled/brightness 0
 
 on property:iodriver.boot_complete=1
     write /sys/class/leds/vled1/brightness 0
