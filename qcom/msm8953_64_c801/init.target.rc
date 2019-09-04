@@ -99,9 +99,11 @@ on post-fs-data
 
     write /sys/class/leds/vled0/trigger none
     write /sys/class/leds/vled1/trigger none
+	write /sys/class/leds/aled/brightness 0
 
     chmod 0666 /sys/class/leds/vled0/brightness
     chmod 0666 /sys/class/leds/vled1/brightness
+    chmod 0666 /sys/class/leds/aled/brightness
     mkdir /data/vendor/tloc 0700 system drmrpc
 
 

@@ -895,8 +895,8 @@ PRODUCT_PACKAGES := \
     Mms \
     cit.xml \
     FactoryKit \
-    LovdreamDeviceInfo 
-    #QtiDialer \
+    LovdreamDeviceInfo \
+    QtiDialer 
 
 ifeq ($(TARGET_HAS_LOW_RAM),true)
     DELAUN := Launcher3Go
@@ -1250,6 +1250,12 @@ ifeq ($(TARGET_HAS_LOW_RAM),true)
 else
     PRODUCT_PROPERTY_OVERRIDES += \
         persist.vendor.qcomsysd.enabled=1
+endif
+
+ifeq ($(PRODUCT_VARIANT),smartcam)
+PRODUCT_PROPERTY_OVERRIDES += persist.vendor.board.config=smartcam
+else
+PRODUCT_PROPERTY_OVERRIDES += persist.vendor.board.config=tab8
 endif
 
 PRODUCT_PACKAGES += liboemaids_system
