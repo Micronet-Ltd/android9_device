@@ -35,4 +35,6 @@ recovery_only(`
     set_prop(recovery, hw_build_version_mcu);
     get_prop(recovery, hw_build_version_fpga);
     set_prop(recovery, hw_build_version_fpga);
+    get_prop(recovery, hw_board_id);
+    set_prop(recovery, hw_board_id);
 ')
