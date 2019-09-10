@@ -34,6 +34,7 @@ domain_auto_trans(init, post_init_exec, post_init)
 
 allow post_init post_init_exec:file { rx_file_perms entrypoint };
 allow post_init vendor_shell_exec:file {rx_file_perms entrypoint };
+allow post_init vendor_toolbox_exec:file  rx_file_perms;
 allow post_init { system_file rootfs vendor_shell_exec }:file execute_no_trans;
 allow post_init proc_board_id:file r_file_perms;
 
