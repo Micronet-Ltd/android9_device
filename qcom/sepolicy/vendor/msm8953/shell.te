@@ -26,4 +26,5 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 allow shell hw_board_id:property_service set;
+allow shell proc_board_id:file r_file_perms;
 #allow shell hw_board_id:property_service get;
