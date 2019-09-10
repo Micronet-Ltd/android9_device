@@ -178,15 +178,6 @@ on property:sys.usb.config=diag,serial_tty,serial_smd && property:sys.usb.config
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
     
-#add by xxf
-service lov_search_broad  /vendor/bin/sh /vendor/bin/lov_search_broad.sh
-	disabled
-	oneshot
-on property:persist.sys.lov.broad=1
-	start lov_search_broad
-	
-#add by xxf	
-
 on property:sys.usb.config=diag,serial_tty,serial_smd,adb && property:sys.usb.configfs=0
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
