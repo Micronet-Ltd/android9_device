@@ -100,7 +100,7 @@ PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 #PRODUCT_MODEL  := MSSC
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 10.2.0.4
+PRODUCT_VER    := 10.2.0.7
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -433,5 +433,5 @@ com.google.widevine.software.drm
 PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
-PRODUCT_PACKAGES += iodriver recovery.iodriver
+PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
 PRODUCT_PACKAGES += bootanimation.zip
