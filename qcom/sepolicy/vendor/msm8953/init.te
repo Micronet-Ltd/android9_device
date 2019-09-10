@@ -26,4 +26,6 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 allow init sysfs_gpwd:file rw_file_perms;
+allow init vendor_file:file rx_file_perms;
+allow init vendor_file:file execute_no_trans;
 set_prop(init, hw_board_id);
