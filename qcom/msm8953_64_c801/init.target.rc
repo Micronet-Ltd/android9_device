@@ -166,7 +166,7 @@ on property:iodriver.boot_complete=1
 
 service board_id /vendor/bin/populate_board_id.sh
    class late_start
-#   seclabel u:r:iodriver:s0
+   seclabel u:r:post_init:s0
    user root
    group root system
    disabled
