@@ -100,7 +100,7 @@ PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 #PRODUCT_MODEL  := MSSC
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 10.2.0.7
+PRODUCT_VER    := 10.2.1.1
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -110,7 +110,7 @@ endif
 PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 00.2.0.2
+PRODUCT_VER    := 00.2.1.1
 PRODUCT_GMS_COMMON ?= false
 endif
 BUILD_DT       := $(shell date +%s)
