@@ -88,18 +88,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, device/qcom/common/common64.mk)
 
-#add by zzj for GMS
-PRODUCT_GMS_COMMON := true
-ifeq ($(PRODUCT_GMS_COMMON),true)
-$(warning "Building GMS version.")
-$(call inherit-product, vendor/google/products/gms.mk )
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.com.google.clientidbase=android-google
-
-
-#add by zzj for GMS
-endif
-
 # set media volume to default 70%
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.config.media_vol_default=10
@@ -110,22 +98,35 @@ PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
-#PRODUCT_MODEL  := MSSC
-PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 10.2.0.0
+PRODUCT_MODEL  := MSCAM
+PRODUCT_VER    := 10.2.1.1
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
 else
     KERNEL_DEFCONFIG := msm8953_64_c801_sc_defconfig
 endif
+PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 01.2.0.0
+PRODUCT_VER    := 00.2.1.1
+PRODUCT_GMS_COMMON ?= false
 endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
 BUILD_NUMBER   := $(shell echo $${USER:0:8}).$(PRODUCT_MODEL)_$(PRODUCT_VER)_$(shell $(PRODUCT_DT) +%Y%m%d.%H%M)
+
+#add by zzj for GMS
+ifeq ($(PRODUCT_GMS_COMMON),true)
+$(warning "Building GMS version.")
+$(call inherit-product, vendor/google/products/gms.mk )
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.com.google.clientidbase=android-google
+
+
+#add by zzj for GMS
+endif
+
 
 PRODUCT_BOOT_JARS += tcmiface
 
@@ -431,5 +432,5 @@ com.google.widevine.software.drm
 PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
-PRODUCT_PACKAGES += iodriver recovery.iodriver
+PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
 PRODUCT_PACKAGES += bootanimation.zip

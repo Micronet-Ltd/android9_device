@@ -99,9 +99,11 @@ on post-fs-data
 
     write /sys/class/leds/vled0/trigger none
     write /sys/class/leds/vled1/trigger none
+	write /sys/class/leds/aled/brightness 0
 
     chmod 0666 /sys/class/leds/vled0/brightness
     chmod 0666 /sys/class/leds/vled1/brightness
+    chmod 0666 /sys/class/leds/aled/brightness
     mkdir /data/vendor/tloc 0700 system drmrpc
 
 
@@ -154,6 +156,7 @@ on property:sys.boot_completed=1
    start qrngp
    setprop	hw.build.version.mcu unknown
    setprop hw.build.version.fpga unknown
+   start board_id
    start iodriver
    start suspend_service
 
@@ -161,6 +164,14 @@ on property:iodriver.boot_complete=1
    write /sys/class/leds/vled1/brightness 0
    write /sys/class/leds/vled0/brightness 0
 
+service board_id /vendor/bin/populate_board_id.sh
+   class late_start
+   seclabel u:r:post_init:s0
+   user root
+   group root system
+   disabled
+   oneshot
+	
 service iodriver /system/bin/iodriver
    class late_start
    seclabel u:r:iodriver:s0
