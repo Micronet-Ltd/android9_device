@@ -109,8 +109,13 @@ endif
 PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
+ifeq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_VER    := 01.2.3.0
 PRODUCT_GMS_COMMON := true
+else
+PRODUCT_VER    := 00.2.3.0
+PRODUCT_GMS_COMMON ?= false
+endif
 endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
