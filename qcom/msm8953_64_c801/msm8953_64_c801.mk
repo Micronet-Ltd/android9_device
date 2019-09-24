@@ -432,5 +432,5 @@ com.google.widevine.software.drm
 PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
-PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh smartcam
+PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh lm.smartcam.androidapp
 PRODUCT_PACKAGES += bootanimation.zip
