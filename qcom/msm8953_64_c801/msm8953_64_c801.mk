@@ -98,9 +98,8 @@ PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
-#PRODUCT_MODEL  := MSSC
-PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 10.2.1.0
+PRODUCT_MODEL  := MSCAM
+PRODUCT_VER    := 10.2.4.0
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -110,8 +109,13 @@ endif
 PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
-PRODUCT_VER    := 01.2.1.0
+ifeq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_VER    := 01.2.4.0
 PRODUCT_GMS_COMMON := true
+else
+PRODUCT_VER    := 00.2.4.0
+PRODUCT_GMS_COMMON ?= false
+endif
 endif
 BUILD_DT       := $(shell date +%s)
 PRODUCT_DT     := date -d @$(BUILD_DT)
@@ -433,5 +437,5 @@ com.google.widevine.software.drm
 PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
-PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
+PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
 PRODUCT_PACKAGES += bootanimation.zip
