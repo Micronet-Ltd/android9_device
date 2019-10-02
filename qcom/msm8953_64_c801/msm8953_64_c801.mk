@@ -99,7 +99,7 @@ PRODUCT_BRAND := Android
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_MODEL  := MSCAM
-PRODUCT_VER    := 10.2.4.1
+PRODUCT_VER    := 10.2.4.2
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -113,7 +113,7 @@ ifeq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_VER    := 01.2.4.0
 PRODUCT_GMS_COMMON := true
 else
-PRODUCT_VER    := 00.2.4.0
+PRODUCT_VER    := 00.2.4.2
 PRODUCT_GMS_COMMON ?= false
 endif
 endif
