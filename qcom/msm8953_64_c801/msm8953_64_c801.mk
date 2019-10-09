@@ -94,7 +94,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	
 PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
-PRODUCT_BRAND := Android
+PRODUCT_BRAND := TREQ
+PRODUCT_MODEL := msm8953 for arm64
+NAME_PRODUCT := SmarTab8
+TARGET_DEVICE1 := SmarTab8
+DEVICE_NAME := SmarTab8
 #PRODUCT_MODEL := msm8953 for arm64
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
@@ -126,7 +130,7 @@ ifeq ($(PRODUCT_GMS_COMMON),true)
 $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.com.google.clientidbase=android-google
+	ro.com.google.clientidbase=android-uniscope
 
 
 #add by zzj for GMS
