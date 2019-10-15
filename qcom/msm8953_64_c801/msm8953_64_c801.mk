@@ -126,7 +126,7 @@ ifeq ($(PRODUCT_GMS_COMMON),true)
 $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.com.google.clientidbase=android-google
+	ro.com.google.clientidbase=android-uniscope
 
 
 #add by zzj for GMS
