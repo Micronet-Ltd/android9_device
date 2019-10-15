@@ -208,12 +208,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IRadio</name>
             <instance>slot1</instance>
-            <instance>slot2</instance>
         </interface>
         <interface>
             <name>ISap</name>
             <instance>slot1</instance>
-            <instance>slot2</instance>
         </interface>
     </hal>
    <hal format="hidl">
@@ -232,7 +230,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        <interface>
            <name>ISecureElement</name>
            <instance>SIM1</instance>
-           <!--<instance>SIM2</instance> -->
        </interface>
     </hal>
     <hal format="hidl">
@@ -242,7 +239,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IQcRilAudio</name>
             <instance>slot1</instance>
-            <instance>slot2</instance>
         </interface>
     </hal>
     <!-- RIL UIM REMOTE CLIENT -->
@@ -365,7 +361,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IQtiRadio</name>
             <instance>slot1</instance>
-            <instance>slot2</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -375,7 +370,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IQtiRadio</name>
             <instance>slot1</instance>
-            <instance>slot2</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -553,7 +547,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IDataConnection</name>
             <instance>slot1</instance>
-            <instance>slot2</instance>
         </interface>
     </hal>
     <!-- WFD HAL Service -->
