@@ -98,5 +98,7 @@
 /dev/ttyUSB1							    u:object_r:device_tty_mic:s0
 /dev/ttyACM2							    u:object_r:device_tty_mic:s0
 /dev/ttyACM3							    u:object_r:device_tty_mic:s0
-/dev/j1708							        u:object_r:device_tty_mic:s0
+/dev/j1708							    u:object_r:device_tty_mic:s0
+
+/sbin/iodriver        						    u:object_r:iodriver_exec:s0
 

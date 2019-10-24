@@ -28,4 +28,4 @@
 #allow shell hw_board_id:property_service set;
 allow shell proc_board_id:file r_file_perms;
 get_prop(shell, hw_board_id);
-
+set_prop(shell, iodriver_boot_complete);
