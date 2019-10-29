@@ -335,6 +335,8 @@ INIT += init.target.vendor.rc
 INIT += init.qti.fm.sh
 INIT += init.qti.can.sh
 INIT += init.qti.charger.sh
+
+INIT += lov_search_broad.sh
 #IPROUTE2
 IPROUTE2 := ip
 IPROUTE2 += libiprouteutil

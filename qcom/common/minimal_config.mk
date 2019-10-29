@@ -71,6 +71,7 @@ INIT += init.qcom.vendor.rc
 INIT += init.target.vendor.rc
 INIT += init.qti.fm.sh
 INIT += init.qti.charger.sh
+INIT += lov_search_broad.sh
 PRODUCT_PACKAGES += $(INIT)
 
 ifneq ($(strip $(TARGET_USES_RRO)),true)
