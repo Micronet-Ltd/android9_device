@@ -27,7 +27,7 @@
 
 allow init sysfs_gpwd:file rw_file_perms;
 #allow init post_init_exec:file rx_file_perms;
-allow init proc_board_id:file r_file_perms;
+allow init proc_board_id:file rw_file_perms;
 set_prop(init, hw_board_id);
 set_prop(init, iodriver_boot_complete);
 set_prop(init, hw_build_version_mcu);
