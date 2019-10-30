@@ -42,11 +42,6 @@ add_service(system_server, regionalization_service);
 
 #Allow system_server to add and find perf service
 #add_service(system_server, vendor_perf_service);
-
-#add by xxf
-userdebug_or_eng(`
-allow system_server sysfs:file { getattr  open write};
-')
 allow system_server vendor_perf_service:service_manager find;
 #add by xxf
 allow system_server lovd_device_service:service_manager { add };
