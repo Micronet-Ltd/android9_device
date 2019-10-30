@@ -439,7 +439,7 @@ PRODUCT_PACKAGES += libwvdrmengine
 
 PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
 ifeq ($(PRODUCT_VARIANT),smartcam)
-#PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
+PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
 endif
 
 PRODUCT_PACKAGES += bootanimation.zip
