@@ -27,3 +27,5 @@
 
 allow hal_light_default sysfs_graphics:file rw_file_perms;
 allow hal_light_default sysfs:file rw_file_perms;
+allow hal_light_default sysfs:file {open read write};
+hal_client_domain(platform_app, hal_light);
