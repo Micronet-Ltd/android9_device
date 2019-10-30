@@ -99,7 +99,7 @@ PRODUCT_BRAND := Android
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_MODEL  := MSCAM
-PRODUCT_VER    := 10.2.6.3
+PRODUCT_VER    := 10.2.6.4
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -439,7 +439,7 @@ PRODUCT_PACKAGES += libwvdrmengine
 
 PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
 ifeq ($(PRODUCT_VARIANT),smartcam)
-PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
+#PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
 endif
 
 PRODUCT_PACKAGES += bootanimation.zip
