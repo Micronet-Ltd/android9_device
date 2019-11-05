@@ -1,0 +1,27 @@
+#domain_auto_trans(init, vendor_shell_exec, post_init)
+allow vendor_shell vendor_shell_exec:file rx_file_perms;
+allow vendor_shell vendor_toolbox_exec:file rx_file_perms;
+
+# Use fd from shell when vendor_shell is started from shell
+allow vendor_shell shell:fd use;
+
+# adbd: allow `adb shell /vendor/bin/sh` and `adb shell` then `/vendor/bin/sh`
+allow vendor_shell adbd:fd use;
+allow vendor_shell adbd:process sigchld;
+allow vendor_shell adbd:unix_stream_socket { getattr ioctl read write };
+
+allow vendor_shell devpts:chr_file rw_file_perms;
+allow vendor_shell tty_device:chr_file rw_file_perms;
+allow vendor_shell console_device:chr_file rw_file_perms;
+allow vendor_shell input_device:dir r_dir_perms;
+allow vendor_shell input_device:chr_file rw_file_perms;
+ 
+allow vendor_shell kmsg_device:chr_file r_file_perms;
+allow vendor_shell proc_kmsg:file r_file_perms;
+allow vendor_shell kernel:system syslog_read;
+r_dir_file(vendor_shell, proc_kmsg)
+allow vendor_shell proc_board_id:file r_file_perms;
+get_prop(vendor_shell, hw_board_id);
+set_prop(vendor_shell, iodriver_boot_complete);
+get_prop(vendor_shell, sys_get_kmsg);
+set_prop(vendor_shell, sys_get_kmsg); 

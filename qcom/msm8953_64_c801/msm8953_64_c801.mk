@@ -113,7 +113,7 @@ ifeq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_VER    := 01.2.6.4
 PRODUCT_GMS_COMMON := true
 else
-PRODUCT_VER    := 00.2.6.4
+PRODUCT_VER    := 00.2.6.5
 PRODUCT_GMS_COMMON ?= false
 endif
 endif
@@ -437,7 +437,7 @@ com.google.widevine.software.drm
 PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
-PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
+PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh udbg.sh
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
 endif

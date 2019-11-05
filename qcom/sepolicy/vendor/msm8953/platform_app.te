@@ -37,3 +37,4 @@ get_prop(platform_app, iodriver_boot_complete);
 get_prop(platform_app, hw_build_version_mcu);
 get_prop(platform_app, hw_build_version_fpga);
 get_prop(platform_app, hw_board_id);
+get_prop(platform_app, sys_get_kmsg);
