@@ -45,5 +45,11 @@ allow udbg kmsg_device:chr_file r_file_perms;
 allow udbg console_device:chr_file rw_file_perms;
 allow udbg kernel:system syslog_read;
 
+not_full_treble(`allow udbg shell_exec:file rx_file_perms;')
+full_treble_only(`allow udbg vendor_shell_exec:file rx_file_perms;')
+not_full_treble(`allow udbg toolbox_exec:file rx_file_perms;')
+full_treble_only(`allow udbg vendor_toolbox_exec:file rx_file_perms;')
+get_prop(udbg, vendor_tee_listener_prop)
+
 get_prop(udbg, sys_get_kmsg);
 set_prop(udbg, sys_get_kmsg);
