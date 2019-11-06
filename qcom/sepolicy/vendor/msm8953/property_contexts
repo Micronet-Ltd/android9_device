@@ -28,5 +28,4 @@
 vendor.media.msm8953.version	u:object_r:vendor_media_msm8953_version_prop:s0
 hw.board.id			u:object_r:hw_board_id:s0
 iodriver.boot_complete	   	u:object_r:iodriver_boot_complete:s0
-sys.get.kmsg	   		u:object_r:sys_get_kmsg:s0
 vendor.serialno	   		u:object_r:vendor_serialno:s0

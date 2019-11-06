@@ -34,6 +34,3 @@ allow shell vendor_toolbox_exec:file rx_file_perms;
 
 get_prop(shell, hw_board_id);
 set_prop(shell, iodriver_boot_complete);
-set_prop(shell, sys_get_kmsg);
-get_prop(shell, sys_get_kmsg);
-

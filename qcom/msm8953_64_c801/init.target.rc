@@ -164,11 +164,6 @@ on property:iodriver.boot_complete=1
    write /sys/class/leds/vled1/brightness 0
    write /sys/class/leds/vled0/brightness 0
 
-on property:sys.get.kmsg=1
-   exec - system system -- /system/bin/dmesg
-   exec - system system -- /vendor/bin/dmesg
-   start udbg
-
 service board_id /vendor/bin/populate_board_id.sh
    class late_start
    seclabel u:r:post_init:s0
@@ -183,14 +178,6 @@ service iodriver /system/bin/iodriver
    user root
    group root
    disabled
-
-service udbg /vendor/bin/udbg.sh
-   class main
-   seclabel u:r:udbg:s0
-   user root
-   group root system
-   disabled
-   oneshot
 
 service suspend_service /system/bin/suspend_service
    class late_start

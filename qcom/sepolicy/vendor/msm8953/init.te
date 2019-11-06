@@ -34,5 +34,4 @@ set_prop(init, iodriver_boot_complete);
 set_prop(init, hw_build_version_mcu);
 set_prop(init, hw_build_version_fpga);
 set_prop(init, hw_board_id);
-set_prop(init, sys_get_kmsg);
 
