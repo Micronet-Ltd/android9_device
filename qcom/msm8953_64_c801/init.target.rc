@@ -154,8 +154,8 @@ service qrngp /system/bin/qrngp -f
 
 on property:sys.boot_completed=1
    start qrngp
-   setprop	hw.build.version.mcu unknown
-   setprop hw.build.version.fpga unknown
+   # setprop	hw.build.version.mcu unknown
+   # setprop hw.build.version.fpga unknown
    start board_id
    start iodriver
    start suspend_service
