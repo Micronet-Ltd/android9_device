@@ -32,3 +32,5 @@ allow system_app sysfs_vinputs:dir r_dir_perms;
 allow system_app sysfs_vinputs:lnk_file r_file_perms;
 allow system_app sysfs_dm:dir {search};
 allow system_app sysfs_dm:file r_file_perms;
+allow system_app proc_board_id:file r_file_perms;
+get_prop(system_app, hw_board_id);

@@ -217,7 +217,7 @@ case "$user_mode" in
         echo RELATED > /sys/bus/msm_subsys/devices/subsys0/restart_level
         echo RELATED > /sys/bus/msm_subsys/devices/subsys1/restart_level
         echo RELATED > /sys/bus/msm_subsys/devices/subsys2/restart_level
-        echo 3 > /proc/sys/kernel/printk
+        echo 7 > /proc/sys/kernel/printk
         ;;
     *)
 		echo "boot_cust_mode is 1 or null"
