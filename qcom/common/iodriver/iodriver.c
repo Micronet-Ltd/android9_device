@@ -120,8 +120,8 @@ void do_run()
 	snprintf(accelctx.name, sizeof(accelctx.name)-1, "/dev/ttyMICRONET_ACCEL");//"/dev/ttyACM1");
     snprintf(j1708ctx.name, sizeof(j1708ctx.name)-1, "/dev/ttyMICRONET_J1708");//"/dev/ttyACM4");
 
-    property_set(mcu_ver_prop, prop_unknown);
-    property_set(fpga_ver_prop, prop_unknown);
+//    property_set(mcu_ver_prop, prop_unknown);
+//    property_set(fpga_ver_prop, prop_unknown);
 	pthread_create(&control_thread, NULL, control_proc, &controlctx);
 //	pthread_create(&accel_thread, NULL, accel_proc, &accelctx);
     pthread_create(&j1708_thread, NULL, j1708_proc, &j1708ctx);
