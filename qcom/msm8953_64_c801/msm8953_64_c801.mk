@@ -99,7 +99,7 @@ PRODUCT_BRAND := Android
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_MODEL  := MSCAM
-PRODUCT_VER    := 10.2.6.4
+PRODUCT_VER    := 10.2.7.0
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -110,11 +110,11 @@ PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
 ifeq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_VER    := 01.2.6.7
+PRODUCT_VER    := 01.2.7.0
 PRODUCT_GMS_COMMON := true
 DISPLAY_BUILD_NUMBER := true
 else
-PRODUCT_VER    := 00.2.6.7
+PRODUCT_VER    := 00.2.7.8
 PRODUCT_GMS_COMMON ?= false
 endif
 endif
