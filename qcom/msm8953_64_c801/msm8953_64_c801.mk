@@ -99,7 +99,7 @@ PRODUCT_BRAND := Android
 PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_MODEL  := MSCAM
-PRODUCT_VER    := 10.2.6.0
+PRODUCT_VER    := 10.2.7.0
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -110,10 +110,11 @@ PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
 ifeq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_VER    := 01.2.6.0
+PRODUCT_VER    := 01.2.7.0
 PRODUCT_GMS_COMMON := true
+DISPLAY_BUILD_NUMBER := true
 else
-PRODUCT_VER    := 00.2.6.0
+PRODUCT_VER    := 00.2.7.8
 PRODUCT_GMS_COMMON ?= false
 endif
 endif
@@ -126,7 +127,7 @@ ifeq ($(PRODUCT_GMS_COMMON),true)
 $(warning "Building GMS version.")
 $(call inherit-product, vendor/google/products/gms.mk )
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.com.google.clientidbase=android-google
+	ro.com.google.clientidbase=android-uniscope
 
 
 #add by zzj for GMS
@@ -437,5 +438,9 @@ com.google.widevine.software.drm
 PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
-PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
+PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
+ifeq ($(PRODUCT_VARIANT),smartcam)
+PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
+endif
+
 PRODUCT_PACKAGES += bootanimation.zip

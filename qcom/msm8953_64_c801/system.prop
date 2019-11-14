@@ -185,6 +185,7 @@ ro.vendor.qti.am.reschedule_service=true
 # set cutoff voltage to 3400mV
 ro.cutoff_voltage_mv=3400
 
+persist.panel.orientation=90
 #set device emmc size
 ro.emmc_size=16GB
 
@@ -206,7 +207,7 @@ vendor.camera.aux.packagelist=org.codeaurora.snapcam
 
 #set cutoff voltage to 3400mV
 ro.cutoff_voltage_mv=3400
-
+persist.vendor.radio.start_ota_daemon=0
 # ro.location properties below are used in conjunction
 # with NLP_MODE setting in /vendor/etc/izat.conf
 # either as the main network provider or as a fallback

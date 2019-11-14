@@ -211,13 +211,13 @@ user_mode=`getprop ro.boot.usermode`
 case "$user_mode" in
 	"user")
 		setprop sys.usb.configfs 0
-		setprop persist.sys.usb.config mtp
+		setprop persist.sys.usb.config diag,serial_smd,rmnet_ipa,adb
 		setprop sys.usb.config mtp
         echo 0 > /sys/module/msm_poweroff/parameters/download_mode
         echo RELATED > /sys/bus/msm_subsys/devices/subsys0/restart_level
         echo RELATED > /sys/bus/msm_subsys/devices/subsys1/restart_level
         echo RELATED > /sys/bus/msm_subsys/devices/subsys2/restart_level
-        echo 3 > /proc/sys/kernel/printk
+        echo 7 > /proc/sys/kernel/printk
         ;;
     *)
 		echo "boot_cust_mode is 1 or null"

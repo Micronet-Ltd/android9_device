@@ -93,10 +93,17 @@
 /sys/devices/soc/soc:watchdogpin(/.*)?				    u:object_r:sysfs_gpwd:s0
 /(vendor|system/vendor)/bin/populate_board_id.sh      		    u:object_r:post_init_exec:s0
 
-/dev/ttyACM4							    u:object_r:device_tty_mic:s0
 /dev/ttyUSB0							    u:object_r:device_tty_mic:s0
 /dev/ttyUSB1							    u:object_r:device_tty_mic:s0
+/dev/ttyACM0							    u:object_r:device_tty_mic:s0
+/dev/ttyACM1							    u:object_r:device_tty_mic:s0
 /dev/ttyACM2							    u:object_r:device_tty_mic:s0
 /dev/ttyACM3							    u:object_r:device_tty_mic:s0
-/dev/j1708							        u:object_r:device_tty_mic:s0
+/dev/ttyACM4							    u:object_r:device_tty_mic:s0
+/dev/j1708							    u:object_r:device_tty_mic:s0
+/dev/vleds							    u:object_r:device_cradle_dev:s0
+/dev/vgpio							    u:object_r:device_cradle_dev:s0
+/dev/mcu_j1708							    u:object_r:device_cradle_dev:s0
+
+/sbin/iodriver        						    u:object_r:iodriver_exec:s0
 

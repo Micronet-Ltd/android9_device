@@ -39,3 +39,4 @@ allow post_init { system_file rootfs vendor_shell_exec }:file execute_no_trans;
 allow post_init proc_board_id:file r_file_perms;
 
 set_prop(post_init, hw_board_id);
+set_prop(post_init, vendor_serialno);
