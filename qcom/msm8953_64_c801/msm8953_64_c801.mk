@@ -114,7 +114,7 @@ PRODUCT_VER    := 01.2.7.0
 PRODUCT_GMS_COMMON := true
 DISPLAY_BUILD_NUMBER := true
 else
-PRODUCT_VER    := 00.2.7.8
+PRODUCT_VER    := 00.2.7.0
 PRODUCT_GMS_COMMON ?= false
 endif
 endif
