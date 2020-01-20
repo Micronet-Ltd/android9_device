@@ -96,10 +96,17 @@ PRODUCT_NAME := msm8953_64_c801
 PRODUCT_DEVICE := msm8953_64_c801
 PRODUCT_BRAND := Android
 #PRODUCT_MODEL := msm8953 for arm64
-PRODUCT_VARIANT   := $(shell echo $${PRODUCT_VARIANT})
+PRODUCT_VARIANT := $(shell echo $${PRODUCT_VARIANT})
+RODUCT_EXT_APK  := $(shell echo $${PRODUCT_EXT_APK})
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_MODEL  := MSCAM
-PRODUCT_VER    := 10.2.9.0
+ifeq ($(PRODUCT_EXT_APK),lm)
+PRODUCT_VER    := 11.2.10.0
+PRODUCT_EXT_APK := lm
+else
+PRODUCT_VER    := 10.2.10.0
+PRODUCT_EXT_APK :=
+endif
 PRODUCT_VARIANT := smartcam
 ifeq ($(TARGET_BUILD_VARIANT),user)
     KERNEL_DEFCONFIG := msm8953_64_c801_sc-perf_defconfig
@@ -110,11 +117,11 @@ PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
 ifeq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_VER    := 01.2.9.0
+PRODUCT_VER    := 01.2.10.0
 PRODUCT_GMS_COMMON := true
 DISPLAY_BUILD_NUMBER := true
 else
-PRODUCT_VER    := 00.2.9.0
+PRODUCT_VER    := 00.2.10.0
 PRODUCT_GMS_COMMON ?= false
 endif
 endif
@@ -439,7 +446,7 @@ PRODUCT_PACKAGES += libwvdrmengine
 #interage widewine L3 by zzj end
 
 PRODUCT_PACKAGES += iodriver recovery.iodriver populate_board_id.sh
-ifeq ($(PRODUCT_VARIANT),smartcam)
+ifeq ($(PRODUCT_EXT_APK),lm)
 PRODUCT_PACKAGES += lm.smartcam.androidapp libLMLibEncDec libLMLibJni liblocee liblocee-jni 
 endif
 
