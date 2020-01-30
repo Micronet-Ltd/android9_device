@@ -12,6 +12,8 @@ ro.product.uafullmodel=SmarTab8
 ro.product.manufacturer_code=MCN
 ro.device.model=SmarTab8
 ro.product.operator=CT
+ro.product.name=SmarTab8
+ro.product.device=SmarTab8
 ro.product.nofm=0
 ro.product.compass=1
 ro.product.hasbuttonlight=1
@@ -70,6 +72,9 @@ persist.sys.timezone=Asia/Shanghai
 #persist.sys.confirm.timezone=Europe/London
 persist.radio.mode_pref_nv10=1
 
+
+#add by xxf
+persist.sys.has.receiver=false
 
 #persist.sys.isUsbOtgEnabled=true
 
