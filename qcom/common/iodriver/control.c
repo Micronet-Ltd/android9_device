@@ -220,7 +220,7 @@ static int  control_send_mcu(struct control_thread_context * context, uint8_t * 
 		if(st != (size_t)r)
 		{
 			DERR("Bytes written don't match request: %s", strerror(errno));
-			return -1;
+			return errno;
 		}
 		return 0;
 	}
@@ -799,6 +799,9 @@ static int control_receive_gpio(struct control_thread_context * context)
 	//DERR("read message1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 
 	err = control_send_mcu(context, data, size);
+    if(err == EBADF){
+        context->running = false;
+    }
 
 	//in case there was an error with the MCU inform the driver
 	//by returning -1 
@@ -1001,18 +1004,21 @@ void set_fw_vers_files(struct control_thread_context * context)
 				write(fdw, ver, strlen(ver));
 				close(fdw);
 				property_set(prop_name, ver);
-				return;
+			//	return;
 			}
 		}
 
-		if(0 == cnt)
-			sprintf(ver, "%X.%X.%X.%X\n", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
-		else
-			sprintf(ver, "%X\n", *((uint32_t*)&context->frame.data[3]));
+        if(ret >= 0)
+        {
+			if(0 == cnt)
+				sprintf(ver, "%X.%X.%X.%X", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
+			else
+				sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
 
-		write(fdw, ver, strlen(ver));
-		close(fdw);
-        property_set(prop_name, ver);
+			write(fdw, ver, strlen(ver));
+			close(fdw);
+            property_set(prop_name, ver);
+        }
 	}
 }
 
@@ -1404,6 +1410,7 @@ void * control_proc(void * cntx)
 			DTRACE("After sock receive");
 		}
 	} while(context->running);
+    set_fw_vers_files(context);
 
 #if defined (IO_CONTROL_RECOVERY_DEBUG)
     redirect_stdio("/dev/tty");
