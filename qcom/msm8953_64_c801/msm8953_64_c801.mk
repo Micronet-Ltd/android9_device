@@ -116,6 +116,8 @@ endif
 PRODUCT_GMS_COMMON ?= false
 else
 PRODUCT_MODEL  := MSTab8
+NAME_PRODUCT := MSTab8
+DEVICE_NAME := MSTab8
 ifeq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_VER    := 01.2.10.0
 PRODUCT_GMS_COMMON := true
@@ -289,12 +291,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
-    frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
+    frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml
+   # frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml 
 
 PRODUCT_PACKAGES += telephony-ext
 PRODUCT_BOOT_JARS += telephony-ext
@@ -396,6 +398,10 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
 PRODUCT_PROPERTY_OVERRIDES += vendor.rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
 
+PRODUCT_COPY_FILES += \
+    device/qcom/msm8953_64_c801/lib_vts/libprotobuf-cpp-full.so.32:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-full.so \
+    device/qcom/msm8953_64_c801/lib_vts/libprotobuf-cpp-full.so.64:$(TARGET_COPY_OUT_VENDOR)/lib64/libprotobuf-cpp-full.so
+
 ifeq ($(ENABLE_AB),true)
 #A/B related packages
 PRODUCT_PACKAGES += update_engine \
@@ -437,6 +443,7 @@ PRODUCT_COPY_FILES += \
 
 
 -include $(TOPDIR)vendor/nxp/pn8xt/device-nfc.mk
+#-include $(TOPDIR)vendor/nxp/pn8xt/BoardConfigNfc.mk
 
 #interage widewine L3 by zzj start
 PRODUCT_PROPERTY_OVERRIDES += drm.service.enabled=true
