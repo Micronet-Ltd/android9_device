@@ -8,11 +8,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 #PRODUCT_BRAND := qcom
-PRODUCT_BRAND := MICRONET
+PRODUCT_BRAND := TREQ
 PRODUCT_AAPT_CONFIG += hdpi mdpi
 
 #PRODUCT_MANUFACTURER := QUALCOMM
-PRODUCT_MANUFACTURER := MICRONET
+PRODUCT_MANUFACTURER := TREQ
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=libqti-perfd-client.so \
