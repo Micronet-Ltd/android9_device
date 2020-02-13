@@ -119,7 +119,7 @@ else
 PRODUCT_MODEL := SmarTab-8
 DEVICE_NAME   := SmarTab-8
 ifeq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_VER    := 01.2.10.0
+PRODUCT_VER    := 01.3.01.0
 PRODUCT_GMS_COMMON := true
 DISPLAY_BUILD_NUMBER := true
 else
