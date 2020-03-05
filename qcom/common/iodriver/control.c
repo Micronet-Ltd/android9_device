@@ -799,9 +799,6 @@ static int control_receive_gpio(struct control_thread_context * context)
 	//DERR("read message1: %u %u %u %u %u enum %u	\n", data[0], data[1], data[2], data[3], data[4], (uint8_t)MAPI_GET_MCU_GPIO_STATE_DBG);
 
 	err = control_send_mcu(context, data, size);
-    if(err == EBADF){
-        context->running = false;
-    }
 
 	//in case there was an error with the MCU inform the driver
 	//by returning -1 
@@ -1004,6 +1001,9 @@ void set_fw_vers_files(struct control_thread_context * context)
 				write(fdw, ver, strlen(ver));
 				close(fdw);
 				property_set(prop_name, ver);
+                if(ret == EBADF){
+                    context->running = false;
+                }
 			//	return;
 			}
 		}
