@@ -56,6 +56,8 @@
 
    <!-- Enable 802.11ac for Wifi hotspot (SAP) -->
    <bool translatable="false" name="config_wifi_softap_ieee80211ac_supported">false</bool>
+
+    <string name="config_deviceProvisioningPackage">com.google.android.apps.work.oobconfig</string>
    
     <!-- Control the behavior when the user short presses the menu button.
             0 - Nothing
@@ -67,6 +69,6 @@
 
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">254</integer>
+    <integer name="config_screenBrightnessSettingDefault">96</integer>
 
 </resources>
