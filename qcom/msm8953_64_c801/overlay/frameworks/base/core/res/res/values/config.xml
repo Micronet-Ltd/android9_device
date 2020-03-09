@@ -69,6 +69,6 @@
 
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">254</integer>
+    <integer name="config_screenBrightnessSettingDefault">96</integer>
 
 </resources>
