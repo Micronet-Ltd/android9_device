@@ -56,7 +56,7 @@ MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 
 MASTER_SIDE_CP_TARGET_LIST := msm8996 msm8998 sdm660 sdm845 apq8098_latv sdm710 qcs605 msmnile $(MSMSTEPPE) $(TRINKET)
 
 #List of targets where Vulkan feature level is restricted to 0
-VULKAN_FEATURE_LEVEL_0_TARGETS_LIST := msm8937_32 msm8937_64 sdm660_32 sdm660_64 msm8998 msm8998_32 msm8996 msm8953_64 msm8953_32
+VULKAN_FEATURE_LEVEL_0_TARGETS_LIST := msm8937_32 msm8937_64 sdm660_32 sdm660_64 msm8998 msm8998_32 msm8996 msm8953_64 msm8953_32 msm8953_64_c801
 
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
@@ -891,9 +891,9 @@ PRODUCT_PACKAGES := \
     wipowerservice \
     Mms \
     cit.xml \
+    QtiDialer \
     FactoryKit \
-    LovdreamDeviceInfo \
-    QtiDialer 
+    LovdreamDeviceInfo 
 
 ifeq ($(TARGET_HAS_LOW_RAM),true)
     DELAUN := Launcher3Go
@@ -1251,8 +1251,14 @@ endif
 
 ifeq ($(PRODUCT_VARIANT),smartcam)
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.board.config=smartcam
+PRODUCT_PROPERTY_OVERRIDES += ro.product.name=MSCAM
+PRODUCT_PROPERTY_OVERRIDES += ro.device.model=MSCAM
+PRODUCT_PROPERTY_OVERRIDES += ro.product.device=MSCAM
 else
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.board.config=tab8
+PRODUCT_PROPERTY_OVERRIDES += ro.product.name=SmarTab-8
+PRODUCT_PROPERTY_OVERRIDES += ro.device.model=SmarTab-8
+PRODUCT_PROPERTY_OVERRIDES += ro.product.device=SmarTab-8
 endif
 
 PRODUCT_PACKAGES += liboemaids_system
