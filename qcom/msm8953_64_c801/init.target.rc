@@ -290,7 +290,6 @@ on boot
     setprop vendor.usb.rmnet.func.name "rmnet_bam"
     setprop vendor.usb.rmnet.inst.name "rmnet"
     setprop vendor.usb.dpl.inst.name "dpl"
-    setprop ro.product.first_api_level "26"
 
 service wcnss-service /system/vendor/bin/wcnss_service
     class main

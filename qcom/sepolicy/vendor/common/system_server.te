@@ -200,13 +200,12 @@ hal_client_domain(system_server, hal_wifilearner)
 r_dir_file(system_server, sysfs_kgsl_proc);
 
 allow system_server { system_app_data_file bluetooth_data_file nfc_data_file radio_data_file shell_data_file app_data_file }:file map;
+
 #add by xxf
-userdebug_or_eng(`
 allow system_server sysfs_battery_supply:file {read open getattr};
+
+#add by xxf
 typeattribute system_server system_executes_vendor_violators,vendor_executes_system_violators,data_between_core_and_vendor_violators;
-allow system_server vendor_audioftm_exec:file {getattr execute read open};
-allow system_server vendor_audioftm_exec:file {execute_no_trans};
+allow system_server vendor_audioftm_exec:file {getattr execute read open execute_no_trans};
 allow system_server vendor_audio_data_file:dir {search add_name write};
 allow system_server vendor_audio_data_file:file {getattr  read open write create};
-')
-
