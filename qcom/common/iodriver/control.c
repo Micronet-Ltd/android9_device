@@ -963,25 +963,20 @@ void set_fw_vers_files(struct control_thread_context * context)
     const char* prop_name = 0;
 
 
-	for(cnt = 0; cnt < 2; ++cnt)
-	{
+	for (cnt = 0; cnt < 2; ++cnt) {
 	    req[0] = MAPI_READ_RQ;
-	    if(0 == cnt)
-	    {
+	    if (0 == cnt) {
 	    	fn = mcu_file;
 	    	req[1] = MAPI_GET_MCU_FW_VERSION;
             prop_name = mcu_ver_prop;
-	    }
-	    else
-	    {
+	    } else {
 	    	fn = fpga_file;
 	    	req[1] = MAPI_GET_FPGA_VERSION;
             prop_name = fpga_ver_prop;
 	    }
 
 	    fdw = open(fn, O_WRONLY, 0666);
-    	if(0 > fdw)
-    	{
+    	if (0 > fdw) {
     		DERR("set_fw_vers_files cannot open /proc/mcu_version\n");
     		continue;
     	}
@@ -991,28 +986,25 @@ void set_fw_vers_files(struct control_thread_context * context)
 		context->dont_send = true;
 		strcpy(ver, prop_unknown);
 
-		while (context->dont_send == true)
-		{
+		while (context->dont_send) {
 			ret = control_receive_mcu(context);
-			if(ret < 0)
-			{
+			if (ret < 0) {
 				DERR("set_fw_vers_files failed - %d\n", ret);
 				context->dont_send = false;
 
 				write(fdw, ver, strlen(ver));
 				close(fdw);
 				property_set(prop_name, ver);
-                if(ret == EBADF){
+                if (ret == EBADF) {
                     context->running = false;
                 }
 			//	return;
 			}
 		}
 
-        if(ret >= 0)
-        {
-			if(0 == cnt)
-				sprintf(ver, "%X.%X.%X.%X", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
+        if (ret >= 0) {
+			if (0 == cnt)
+				sprintf(ver, "%X.%d.%d.%d", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
 			else
 				sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
 
