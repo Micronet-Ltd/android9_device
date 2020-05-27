@@ -12,6 +12,7 @@
 #define __USE_XOPEN2K
 #define __USE_MISC
 
+#include <cutils/properties.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <libgen.h>
@@ -962,25 +963,20 @@ void set_fw_vers_files(struct control_thread_context * context)
     const char* prop_name = 0;
 
 
-	for(cnt = 0; cnt < 2; ++cnt)
-	{
+	for (cnt = 0; cnt < 2; ++cnt) {
 	    req[0] = MAPI_READ_RQ;
-	    if(0 == cnt)
-	    {
+	    if (0 == cnt) {
 	    	fn = mcu_file;
 	    	req[1] = MAPI_GET_MCU_FW_VERSION;
             prop_name = mcu_ver_prop;
-	    }
-	    else
-	    {
+	    } else {
 	    	fn = fpga_file;
 	    	req[1] = MAPI_GET_FPGA_VERSION;
             prop_name = fpga_ver_prop;
 	    }
 
 	    fdw = open(fn, O_WRONLY, 0666);
-    	if(0 > fdw)
-    	{
+    	if (0 > fdw) {
     		DERR("set_fw_vers_files cannot open /proc/mcu_version\n");
     		continue;
     	}
@@ -990,28 +986,25 @@ void set_fw_vers_files(struct control_thread_context * context)
 		context->dont_send = true;
 		strcpy(ver, prop_unknown);
 
-		while (context->dont_send == true)
-		{
+		while (context->dont_send) {
 			ret = control_receive_mcu(context);
-			if(ret < 0)
-			{
+			if (ret < 0) {
 				DERR("set_fw_vers_files failed - %d\n", ret);
 				context->dont_send = false;
 
 				write(fdw, ver, strlen(ver));
 				close(fdw);
 				property_set(prop_name, ver);
-                if(ret == EBADF){
+                if (ret == EBADF) {
                     context->running = false;
                 }
 			//	return;
 			}
 		}
 
-        if(ret >= 0)
-        {
-			if(0 == cnt)
-				sprintf(ver, "%X.%X.%X.%X", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
+        if (ret >= 0) {
+			if (0 == cnt)
+				sprintf(ver, "%X.%d.%d.%d", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
 			else
 				sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
 
@@ -1281,6 +1274,8 @@ void * control_proc(void * cntx)
 	bool on_init = true;
 	context->max_app_watchdog_ping_time = get_app_watchdog_expire_time();
 	int app_watchdog_count = 0;
+    char device_type[92];
+    int dev_type = 0;
 
 #if defined (IO_CONTROL_RECOVERY_DEBUG)
     redirect_stdio(IO_CONTROL_LOG);
@@ -1314,6 +1309,19 @@ void * control_proc(void * cntx)
     else
     	DINFO("%s /dev/one_wire does not exist", __func__);
 
+    memset(device_type, 0, sizeof(device_type) );
+    if (property_get("persist.vendor.board.config", device_type, 0) <= 0 ) {
+        strncpy(device_type, "unknown", sizeof("unknown"));
+        dev_type = 2;
+        DERR("dev_type is unknown %d\n", dev_type);
+    }
+    if (dev_type != 2) {
+        if (0 == strncmp(device_type, "smartcam", strlen("smartcam"))) {
+            dev_type = 1;
+            DERR("dev_type is smartcam %d\n", dev_type);
+        }
+    }
+    DERR("dev_type is %d\n", dev_type);
     // TODO: maby move to check_devies()
 	context->sock_fd = control_open_socket(context);
 
@@ -1335,42 +1343,45 @@ void * control_proc(void * cntx)
 			update_all_GP_inputs(context);
 			set_fw_vers_files(context);
 		}
-#if 1
-		if((context->mcu_fd > -1) && !FD_ISSET(context->mcu_fd, &context->fds)) {
-			/* MCU to periodic A8 pings */
-			clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
-			time_diff = curr_time.tv_sec - time_last_sent_ping.tv_sec;
-			if ((time_diff) > TIME_BETWEEN_MCU_PINGS) {
-				if (context->ping_sent != context->pong_recv)
-				{
-					DERR("ping sent %d, ping rx %d", context->ping_sent, context->pong_recv);
-					context->running = false;
-					break;
-				}
-				uint8_t msg[2];
+#if 0
+        if (dev_type != 1){
+            if((context->mcu_fd > -1) && !FD_ISSET(context->mcu_fd, &context->fds)) {
+                /* MCU to periodic A8 pings */
+                clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
+                time_diff = curr_time.tv_sec - time_last_sent_ping.tv_sec;
+                if ((time_diff) > TIME_BETWEEN_MCU_PINGS) {
+                    if (context->ping_sent != context->pong_recv)
+                    {
+                        DERR("ping sent %d, ping rx %d", context->ping_sent, context->pong_recv);
+                        context->running = false;
+                        break;
+                    }
+                    uint8_t msg[2];
 
-				msg[0] = control_get_seq(context);
-				msg[1] = (uint8_t)PING_REQ;
-				control_send_mcu(context, msg, sizeof(msg));
-				clock_gettime(CLOCK_MONOTONIC_RAW, &time_last_sent_ping);
-				context->ping_sent++;
+                    msg[0] = control_get_seq(context);
+                    msg[1] = (uint8_t)PING_REQ;
+                    control_send_mcu(context, msg, sizeof(msg));
+                    clock_gettime(CLOCK_MONOTONIC_RAW, &time_last_sent_ping);
+                    context->ping_sent++;
 
-				/* Check if we are still getting app pings */
-				clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
-				time_diff = curr_time.tv_sec  - context->last_app_ping_time.tv_sec;
-				DINFO("Time since App ping: %d sec, maxtime: %d sec\n",(int)time_diff, context->max_app_watchdog_ping_time);
-				if ((context->max_app_watchdog_ping_time != 0) && (time_diff > context->max_app_watchdog_ping_time))
-				{
-					get_app_watchdog_count(&app_watchdog_count);
-					set_app_watchdog_count(++app_watchdog_count);
-					DERR("APP ping time expired, causing a watchdog reset, app_watchdog_count %d!!\n", app_watchdog_count);
-					send_app_watchdog(context);
-					/* wait for the watchdog to occur */
-					sleep(60);
-					context->running = false;
-				}
-			}
-		}
+                    /* Check if we are still getting app pings */
+                    clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
+                    time_diff = curr_time.tv_sec  - context->last_app_ping_time.tv_sec;
+                    DINFO("Time since App ping: %d sec, maxtime: %d sec\n",(int)time_diff, context->max_app_watchdog_ping_time);
+                    if ((context->max_app_watchdog_ping_time != 0) && (time_diff > context->max_app_watchdog_ping_time))
+                    {
+                        get_app_watchdog_count(&app_watchdog_count);
+                        set_app_watchdog_count(++app_watchdog_count);
+                        DERR("APP ping time expired, causing a watchdog reset, app_watchdog_count %d!!\n", app_watchdog_count);
+                        send_app_watchdog(context);
+                        /* wait for the watchdog to occur */
+                        sleep(60);
+                        context->running = false;
+                    }
+                }
+            }
+        }
+
 #endif
 
         // TODO: Waiting for events
