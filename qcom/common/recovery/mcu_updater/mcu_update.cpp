@@ -942,9 +942,9 @@ int main(int argc, char **argv)
                     if (err < 0) {
                         printf("mcu update[%s]: mcu don't respond on tx s-rec %s\n", __func__, s_rec);
                     } else if (1 == err) {
-                        printf("mcu update[%s]: mcu not ready\n", __func__);
+                        usleep(200*1000);
+                        printf("mcu update[%s]: mcu not ready for s-rec %s\n", __func__, s_rec);
                     }
-                    usleep(100*1000);
                 } while (1 == err);
 
                 if (0 != err) {
