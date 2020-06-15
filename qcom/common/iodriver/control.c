@@ -1021,6 +1021,76 @@ int32_t set_fw_vers_files(struct control_thread_context * context)
     return ver_maj_n;
 }
 
+#if 0
+int32_t get_in_volts(struct control_thread_context * context, int32_t ver_maj_n)
+{
+	uint8_t req[2];
+	char ver[16] = {0};
+	int32_t ret = -1;
+	int32_t fdw = -1;
+	uint32_t cnt;
+	char* mcu_file = "/proc/mcu_version";
+	char* fn;
+    const char* prop_name = 0;
+
+
+	for (cnt = 0; cnt < 2; ++cnt) {
+	    req[0] = MAPI_READ_RQ;
+	    if (0 == cnt) {
+	    	fn = mcu_file;
+	    	req[1] = MAPI_GET_MCU_FW_VERSION;
+            prop_name = mcu_ver_prop;
+	    } else {
+	    	fn = fpga_file;
+	    	req[1] = MAPI_GET_FPGA_VERSION;
+            prop_name = fpga_ver_prop;
+	    }
+
+	    fdw = open(fn, O_WRONLY, 0666);
+    	if (0 > fdw) {
+    		DERR("set_fw_vers_files cannot open /proc/mcu_version\n");
+    		continue;
+    	}
+
+		control_handle_api_command(context, NULL, req, sizeof(req));
+
+		context->dont_send = true;
+		strcpy(ver, prop_unknown);
+
+		while (context->dont_send) {
+			ret = control_receive_mcu(context);
+			if (ret < 0) {
+				DERR("set_fw_vers_files failed - %d\n", ret);
+				context->dont_send = false;
+
+				write(fdw, ver, strlen(ver));
+				close(fdw);
+				property_set(prop_name, ver);
+                if (ret == EBADF) {
+                    context->running = false;
+                }
+			//	return;
+			}
+		}
+
+        if (ret >= 0) {
+			if (0 == cnt) {
+				sprintf(ver, "%X.%d.%d.%d", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
+                ver_maj_n = context->frame.data[4];
+            } else {
+                sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
+            }
+
+			write(fdw, ver, strlen(ver));
+			close(fdw);
+            property_set(prop_name, ver);
+        }
+	}
+
+    return ver_maj_n;
+}
+#endif
+
 /* Request for all the GPInput values, in case they were missed on bootup */
 int update_all_GP_inputs(struct control_thread_context * context)
 {
