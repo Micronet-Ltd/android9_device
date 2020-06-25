@@ -435,21 +435,19 @@ static int control_receive_mcu(struct control_thread_context * context)
 
 	DTRACE("");
 	/* select returns 0 if timeout, 1 if input available, -1 if error. */
-	ret = select (FD_SETSIZE, (fd_set *)&set, NULL, NULL, &timeout);
-	if (ret != 1)
-	{
+	ret = select(FD_SETSIZE, (fd_set *)&set, NULL, NULL, &timeout);
+	if (ret != 1) {
 		DERR("control_receive_mcu read select failure:ret=%d , %s", ret, strerror(errno));
-		if (ret == -1)
-		{
+		if (ret == -1) {
+            close(context->mcu_fd);
 			context->running = false;
 		}
 		return -1;
 	}
 	bytes_read = read(context->mcu_fd, readbuffer, sizeof(readbuffer));
-	if(bytes_read < 0)
-	{
+	if (bytes_read < 0) {
 		if(EAGAIN == errno)
-			return 0; //
+			return 0;
 		DERR("read: %s", strerror(errno));
 		close(context->mcu_fd);
 		context->mcu_fd = -1;
@@ -457,8 +455,8 @@ static int control_receive_mcu(struct control_thread_context * context)
 		return -1;
 		//abort();
 	}
-	if(0 == bytes_read)
-	{
+
+	if (0 == bytes_read) {
 		DTRACE("port closed");
 		return -1;
 	}
@@ -466,16 +464,13 @@ static int control_receive_mcu(struct control_thread_context * context)
 	offset = 0;
 	// NOTE: bytes_read and offset are signed types
 	// bytes_read and offset must be positive
-	while(bytes_read - offset > 0)
-	{
+	while (bytes_read - offset > 0) {
 		offset += frame_process_buffer(&context->frame, readbuffer + offset, bytes_read - offset);
-		if(offset <= 0)
-		{
+		if(offset <= 0) {
 			DTRACE("offset is <= 0");
 			abort();
 		}
-		if(frame_data_ready(&context->frame))
-		{
+		if (frame_data_ready(&context->frame)) {
 			int status;
 			//process data
 			status = control_frame_process(context, context->frame.data, context->frame.data_len);
@@ -1178,7 +1173,26 @@ static void check_devices(struct control_thread_context * context)
 		} else {
 			DTRACE("%s does not exist", context->name);
 		}
-	}
+	} else {
+        char tty_s[32];
+        int rc;
+        struct stat tty_i;
+
+        rc = readlink(context->name, tty_s, sizeof(tty_s));
+        tty_s[sizeof(tty_s) - sizeof(tty_s[0])] = 0;
+        if (rc > 0) {
+            rc = stat(tty_s, &tty_i);
+            if (0 != rc) {
+                DINFO("%s: %s ponts to not existing %s\n", __func__, context->name, tty_s);
+            } else {
+                return;
+            }
+        }
+        DINFO("%s: restart iodriver\n", __func__);
+        close(context->mcu_fd);
+        context->mcu_fd = -1;
+        context->running = 0;
+    }
 
 	// TODO: add vgpio, and sockets here if needed
 }
@@ -1393,7 +1407,9 @@ void * control_proc(void * cntx)
 
 		// Check for devices that need to be opened/reopened
 		check_devices(context);
-
+        if (!context->running) {
+            break;
+        }
 		/* Only done once and does not depend on data being received */
 		if (on_init && (context->mcu_fd > -1 ) && !FD_ISSET(context->mcu_fd, &context->fds)) {
 			on_init = false;
@@ -1429,7 +1445,7 @@ void * control_proc(void * cntx)
                     /* Check if we are still getting app pings */
                     clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
                     time_diff = curr_time.tv_sec  - context->last_app_ping_time.tv_sec;
-                    DINFO("Time since App ping: %d sec, maxtime: %d sec\n",(int)time_diff, context->max_app_watchdog_ping_time);
+                    DTRACE("Time since App ping: %d sec, maxtime: %d sec\n",(int)time_diff, context->max_app_watchdog_ping_time);
                     if ((context->max_app_watchdog_ping_time != 0) && (time_diff > context->max_app_watchdog_ping_time)) {
                         get_app_watchdog_count(&app_watchdog_count);
                         set_app_watchdog_count(++app_watchdog_count);

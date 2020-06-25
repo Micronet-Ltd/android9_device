@@ -56,7 +56,7 @@ void * j1708_proc(void * cntx)
 
 	do {
 		while(!file_exists(context->name)) {
-			DINFO("Waiting for '%s'", context->name);
+			DTRACE("Waiting for '%s'", context->name);
 			if (-1 != fd_mcu) {
 				close (fd_mcu);
 				fd_mcu = -1;
