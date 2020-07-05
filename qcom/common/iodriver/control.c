@@ -1498,6 +1498,8 @@ void * control_proc(void * cntx)
 			DTRACE("After sock receive");
 		}
 	} while(context->running);
+    if (context->mcu_fd > -1)
+        close(context->mcu_fd);
     set_fw_vers_files(context);
 
 #if defined (IO_CONTROL_RECOVERY_DEBUG)
