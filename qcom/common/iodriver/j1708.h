@@ -8,6 +8,7 @@
 
 struct j1708_thread_context {
 	char name[PATH_MAX];
+    int run;
 };
 
 void * j1708_proc(void * cntx);
