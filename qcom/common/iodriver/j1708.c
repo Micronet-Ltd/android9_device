@@ -55,7 +55,7 @@ void * j1708_proc(void * cntx)
 	uint8_t readbuffer[MIC_J1708_MAX_DATA_LEN];
 
 	do {
-		while(!file_exists(context->name)) {
+        while (!file_exists(context->name) && context->run) {
 			DTRACE("Waiting for '%s'", context->name);
 			if (-1 != fd_mcu) {
 				close (fd_mcu);
@@ -68,6 +68,17 @@ void * j1708_proc(void * cntx)
 			fd_max = -1;
 			sleep(1);
 		}
+        if (!context->run) {
+            if (-1 != fd_mcu) {
+                close (fd_mcu);
+                fd_mcu = -1;
+            }
+            if (-1 != fd_dev) {
+                close (fd_dev);
+                fd_dev = -1;
+            }
+            break;
+        }
 
 		//MCU tty port
 		if(-1 == fd_mcu)

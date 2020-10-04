@@ -124,6 +124,7 @@ void do_run()
 //    property_set(fpga_ver_prop, prop_unknown);
 	pthread_create(&control_thread, NULL, control_proc, &controlctx);
 //	pthread_create(&accel_thread, NULL, accel_proc, &accelctx);
+    j1708ctx.run = 1;
     pthread_create(&j1708_thread, NULL, j1708_proc, &j1708ctx);
 
 #ifndef LINUX_BUILD
@@ -139,6 +140,7 @@ void do_run()
 //			memset(&controlctx, 0, sizeof(controlctx)); 				// GCC bug #53119
 //			snprintf(controlctx.name, sizeof(controlctx.name)-1, "/dev/ttyMICRONET_CONTROL"); //"/dev/ttyACM0");
 //			pthread_create(&control_thread, NULL, control_proc, &controlctx);
+            j1708ctx.run = 0;
 			break;
 		}
 	}
@@ -168,6 +170,10 @@ int main(int argc __attribute__((unused)), char * argv[] __attribute__((unused))
 	}
 
 
+#ifndef LINUX_BUILD
+    property_set("iodriver.boot_complete", "0");
+#endif
+    sleep(4);
 	do_run();
 	return EXIT_SUCCESS;
 }
