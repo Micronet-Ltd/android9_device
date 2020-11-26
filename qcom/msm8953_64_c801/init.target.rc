@@ -89,7 +89,7 @@ on post-fs-data
     chmod 0666 /dev/ttyACM3
     chmod 0666 /dev/ttyACM4
 
-    write /proc/mcu_version unknown
+#    write /proc/mcu_version unknown
     write /proc/fpga_version unknown
 #    chmod 0666 /proc/mcu_version
 #    chmod 0666 /proc/fpga_version
@@ -290,7 +290,6 @@ on boot
     setprop vendor.usb.rmnet.func.name "rmnet_bam"
     setprop vendor.usb.rmnet.inst.name "rmnet"
     setprop vendor.usb.dpl.inst.name "dpl"
-    setprop ro.product.first_api_level "26"
 
 service wcnss-service /system/vendor/bin/wcnss_service
     class main

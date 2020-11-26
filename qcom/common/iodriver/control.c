@@ -435,21 +435,19 @@ static int control_receive_mcu(struct control_thread_context * context)
 
 	DTRACE("");
 	/* select returns 0 if timeout, 1 if input available, -1 if error. */
-	ret = select (FD_SETSIZE, (fd_set *)&set, NULL, NULL, &timeout);
-	if (ret != 1)
-	{
+	ret = select(FD_SETSIZE, (fd_set *)&set, NULL, NULL, &timeout);
+	if (ret != 1) {
 		DERR("control_receive_mcu read select failure:ret=%d , %s", ret, strerror(errno));
-		if (ret == -1)
-		{
+		if (ret == -1) {
+            close(context->mcu_fd);
 			context->running = false;
 		}
 		return -1;
 	}
 	bytes_read = read(context->mcu_fd, readbuffer, sizeof(readbuffer));
-	if(bytes_read < 0)
-	{
+	if (bytes_read < 0) {
 		if(EAGAIN == errno)
-			return 0; //
+			return 0;
 		DERR("read: %s", strerror(errno));
 		close(context->mcu_fd);
 		context->mcu_fd = -1;
@@ -457,8 +455,8 @@ static int control_receive_mcu(struct control_thread_context * context)
 		return -1;
 		//abort();
 	}
-	if(0 == bytes_read)
-	{
+
+	if (0 == bytes_read) {
 		DTRACE("port closed");
 		return -1;
 	}
@@ -466,16 +464,13 @@ static int control_receive_mcu(struct control_thread_context * context)
 	offset = 0;
 	// NOTE: bytes_read and offset are signed types
 	// bytes_read and offset must be positive
-	while(bytes_read - offset > 0)
-	{
+	while (bytes_read - offset > 0) {
 		offset += frame_process_buffer(&context->frame, readbuffer + offset, bytes_read - offset);
-		if(offset <= 0)
-		{
+		if(offset <= 0) {
 			DTRACE("offset is <= 0");
 			abort();
 		}
-		if(frame_data_ready(&context->frame))
-		{
+		if (frame_data_ready(&context->frame)) {
 			int status;
 			//process data
 			status = control_frame_process(context, context->frame.data, context->frame.data_len);
@@ -949,11 +944,14 @@ void update_system_time_with_rtc(struct control_thread_context * context)
 	rtc_bcdconvert_and_set_systime(context->rtc_init_val, dt_str, true);
 	context->rtc_req = false;
 }
-void set_fw_vers_files(struct control_thread_context * context)
+
+// Returns major number of version
+//
+int32_t set_fw_vers_files(struct control_thread_context * context)
 {
 	uint8_t req[2];
 	char ver[16] = {0};
-	int32_t ret = -1;
+	int32_t ret = -1, ver_maj_n = 0;
 	int32_t fdw = -1;
 	uint32_t cnt;
 	char* mcu_file = "/proc/mcu_version";
@@ -962,25 +960,20 @@ void set_fw_vers_files(struct control_thread_context * context)
     const char* prop_name = 0;
 
 
-	for(cnt = 0; cnt < 2; ++cnt)
-	{
+	for (cnt = 0; cnt < 2; ++cnt) {
 	    req[0] = MAPI_READ_RQ;
-	    if(0 == cnt)
-	    {
+	    if (0 == cnt) {
 	    	fn = mcu_file;
 	    	req[1] = MAPI_GET_MCU_FW_VERSION;
             prop_name = mcu_ver_prop;
-	    }
-	    else
-	    {
+	    } else {
 	    	fn = fpga_file;
 	    	req[1] = MAPI_GET_FPGA_VERSION;
             prop_name = fpga_ver_prop;
 	    }
 
 	    fdw = open(fn, O_WRONLY, 0666);
-    	if(0 > fdw)
-    	{
+    	if (0 > fdw) {
     		DERR("set_fw_vers_files cannot open /proc/mcu_version\n");
     		continue;
     	}
@@ -990,37 +983,108 @@ void set_fw_vers_files(struct control_thread_context * context)
 		context->dont_send = true;
 		strcpy(ver, prop_unknown);
 
-		while (context->dont_send == true)
-		{
+		while (context->dont_send) {
 			ret = control_receive_mcu(context);
-			if(ret < 0)
-			{
+			if (ret < 0) {
 				DERR("set_fw_vers_files failed - %d\n", ret);
 				context->dont_send = false;
 
 				write(fdw, ver, strlen(ver));
 				close(fdw);
 				property_set(prop_name, ver);
-                if(ret == EBADF){
+                if (ret == EBADF) {
                     context->running = false;
                 }
 			//	return;
 			}
 		}
 
-        if(ret >= 0)
-        {
-			if(0 == cnt)
-				sprintf(ver, "%X.%X.%X.%X", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
-			else
-				sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
+        if (ret >= 0) {
+			if (0 == cnt) {
+				sprintf(ver, "%X.%d.%d.%d", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
+                ver_maj_n = context->frame.data[4];
+            } else {
+                sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
+            }
 
 			write(fdw, ver, strlen(ver));
 			close(fdw);
             property_set(prop_name, ver);
         }
 	}
+
+    return ver_maj_n;
 }
+
+#if 0
+int32_t get_in_volts(struct control_thread_context * context, int32_t ver_maj_n)
+{
+	uint8_t req[2];
+	char ver[16] = {0};
+	int32_t ret = -1;
+	int32_t fdw = -1;
+	uint32_t cnt;
+	char* mcu_file = "/proc/mcu_version";
+	char* fn;
+    const char* prop_name = 0;
+
+
+	for (cnt = 0; cnt < 2; ++cnt) {
+	    req[0] = MAPI_READ_RQ;
+	    if (0 == cnt) {
+	    	fn = mcu_file;
+	    	req[1] = MAPI_GET_MCU_FW_VERSION;
+            prop_name = mcu_ver_prop;
+	    } else {
+	    	fn = fpga_file;
+	    	req[1] = MAPI_GET_FPGA_VERSION;
+            prop_name = fpga_ver_prop;
+	    }
+
+	    fdw = open(fn, O_WRONLY, 0666);
+    	if (0 > fdw) {
+    		DERR("set_fw_vers_files cannot open /proc/mcu_version\n");
+    		continue;
+    	}
+
+		control_handle_api_command(context, NULL, req, sizeof(req));
+
+		context->dont_send = true;
+		strcpy(ver, prop_unknown);
+
+		while (context->dont_send) {
+			ret = control_receive_mcu(context);
+			if (ret < 0) {
+				DERR("set_fw_vers_files failed - %d\n", ret);
+				context->dont_send = false;
+
+				write(fdw, ver, strlen(ver));
+				close(fdw);
+				property_set(prop_name, ver);
+                if (ret == EBADF) {
+                    context->running = false;
+                }
+			//	return;
+			}
+		}
+
+        if (ret >= 0) {
+			if (0 == cnt) {
+				sprintf(ver, "%X.%d.%d.%d", (uint8_t)context->frame.data[3], (uint8_t)context->frame.data[4], (uint8_t)context->frame.data[5], (uint8_t)context->frame.data[6]);
+                ver_maj_n = context->frame.data[4];
+            } else {
+                sprintf(ver, "%X", *((uint32_t*)&context->frame.data[3]));
+            }
+
+			write(fdw, ver, strlen(ver));
+			close(fdw);
+            property_set(prop_name, ver);
+        }
+	}
+
+    return ver_maj_n;
+}
+#endif
 
 /* Request for all the GPInput values, in case they were missed on bootup */
 int update_all_GP_inputs(struct control_thread_context * context)
@@ -1109,7 +1173,26 @@ static void check_devices(struct control_thread_context * context)
 		} else {
 			DTRACE("%s does not exist", context->name);
 		}
-	}
+	} else {
+        char tty_s[32];
+        int rc;
+        struct stat tty_i;
+
+        rc = readlink(context->name, tty_s, sizeof(tty_s));
+        tty_s[sizeof(tty_s) - sizeof(tty_s[0])] = 0;
+        if (rc > 0) {
+            rc = stat(tty_s, &tty_i);
+            if (0 != rc) {
+                DINFO("%s: %s ponts to not existing %s\n", __func__, context->name, tty_s);
+            } else {
+                return;
+            }
+        }
+        DINFO("%s: restart iodriver\n", __func__);
+        close(context->mcu_fd);
+        context->mcu_fd = -1;
+        context->running = 0;
+    }
 
 	// TODO: add vgpio, and sockets here if needed
 }
@@ -1281,6 +1364,7 @@ void * control_proc(void * cntx)
 	bool on_init = true;
 	context->max_app_watchdog_ping_time = get_app_watchdog_expire_time();
 	int app_watchdog_count = 0;
+    int dev_type = 0;
 
 #if defined (IO_CONTROL_RECOVERY_DEBUG)
     redirect_stdio(IO_CONTROL_LOG);
@@ -1323,7 +1407,9 @@ void * control_proc(void * cntx)
 
 		// Check for devices that need to be opened/reopened
 		check_devices(context);
-
+        if (!context->running) {
+            break;
+        }
 		/* Only done once and does not depend on data being received */
 		if (on_init && (context->mcu_fd > -1 ) && !FD_ISSET(context->mcu_fd, &context->fds)) {
 			on_init = false;
@@ -1333,44 +1419,46 @@ void * control_proc(void * cntx)
 			clock_gettime(CLOCK_MONOTONIC_RAW, &time_last_sent_ping);
 			clock_gettime(CLOCK_MONOTONIC_RAW, &(context->last_app_ping_time));
 			update_all_GP_inputs(context);
-			set_fw_vers_files(context);
+			dev_type = set_fw_vers_files(context);
+            DINFO("slave board %d\n", dev_type);
 		}
 #if 1
-		if((context->mcu_fd > -1) && !FD_ISSET(context->mcu_fd, &context->fds)) {
-			/* MCU to periodic A8 pings */
-			clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
-			time_diff = curr_time.tv_sec - time_last_sent_ping.tv_sec;
-			if ((time_diff) > TIME_BETWEEN_MCU_PINGS) {
-				if (context->ping_sent != context->pong_recv)
-				{
-					DERR("ping sent %d, ping rx %d", context->ping_sent, context->pong_recv);
-					context->running = false;
-					break;
-				}
-				uint8_t msg[2];
+        if (dev_type < 7) {
+            if ((context->mcu_fd > -1) && !FD_ISSET(context->mcu_fd, &context->fds)) {
+                /* MCU to periodic A8 pings */
+                clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
+                time_diff = curr_time.tv_sec - time_last_sent_ping.tv_sec;
+                if ((time_diff) > TIME_BETWEEN_MCU_PINGS) {
+                    if (context->ping_sent != context->pong_recv) {
+                        DERR("ping sent %d, ping rx %d", context->ping_sent, context->pong_recv);
+                        context->running = false;
+                        break;
+                    }
+                    uint8_t msg[2];
 
-				msg[0] = control_get_seq(context);
-				msg[1] = (uint8_t)PING_REQ;
-				control_send_mcu(context, msg, sizeof(msg));
-				clock_gettime(CLOCK_MONOTONIC_RAW, &time_last_sent_ping);
-				context->ping_sent++;
+                    msg[0] = control_get_seq(context);
+                    msg[1] = (uint8_t)PING_REQ;
+                    control_send_mcu(context, msg, sizeof(msg));
+                    clock_gettime(CLOCK_MONOTONIC_RAW, &time_last_sent_ping);
+                    context->ping_sent++;
 
-				/* Check if we are still getting app pings */
-				clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
-				time_diff = curr_time.tv_sec  - context->last_app_ping_time.tv_sec;
-				DINFO("Time since App ping: %d sec, maxtime: %d sec\n",(int)time_diff, context->max_app_watchdog_ping_time);
-				if ((context->max_app_watchdog_ping_time != 0) && (time_diff > context->max_app_watchdog_ping_time))
-				{
-					get_app_watchdog_count(&app_watchdog_count);
-					set_app_watchdog_count(++app_watchdog_count);
-					DERR("APP ping time expired, causing a watchdog reset, app_watchdog_count %d!!\n", app_watchdog_count);
-					send_app_watchdog(context);
-					/* wait for the watchdog to occur */
-					sleep(60);
-					context->running = false;
-				}
-			}
-		}
+                    /* Check if we are still getting app pings */
+                    clock_gettime(CLOCK_MONOTONIC_RAW, &curr_time);
+                    time_diff = curr_time.tv_sec  - context->last_app_ping_time.tv_sec;
+                    DTRACE("Time since App ping: %d sec, maxtime: %d sec\n",(int)time_diff, context->max_app_watchdog_ping_time);
+                    if ((context->max_app_watchdog_ping_time != 0) && (time_diff > context->max_app_watchdog_ping_time)) {
+                        get_app_watchdog_count(&app_watchdog_count);
+                        set_app_watchdog_count(++app_watchdog_count);
+                        DERR("APP ping time expired, causing a watchdog reset, app_watchdog_count %d!!\n", app_watchdog_count);
+                        send_app_watchdog(context);
+                        /* wait for the watchdog to occur */
+                        sleep(60);
+                        context->running = false;
+                    }
+                }
+            }
+        }
+
 #endif
 
         // TODO: Waiting for events
@@ -1410,6 +1498,8 @@ void * control_proc(void * cntx)
 			DTRACE("After sock receive");
 		}
 	} while(context->running);
+    if (context->mcu_fd > -1)
+        close(context->mcu_fd);
     set_fw_vers_files(context);
 
 #if defined (IO_CONTROL_RECOVERY_DEBUG)

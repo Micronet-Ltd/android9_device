@@ -75,7 +75,7 @@ extern "C" {
 #define MCU_UPD_BB      "BB"
 
 #define MCU_UPD_TX_TO   -1
-#define MCU_UPD_RX_TO   4
+#define MCU_UPD_RX_TO   8
 
 #define MCU_UPD_LOG     "/cache/mcu_ua.log"
 #define TTYHSL0_UPD_LOG "/dev/ttyHSL0"
@@ -933,7 +933,6 @@ int main(int argc, char **argv)
 #endif
             if (S_REC_1 == err || S_REC_2 == err || S_REC_3 == err || S_REC_8 == err || S_REC_9 == err || S_REC_7 == err) {
                 do {
-                    //usleep(10*1000);
                     if (0 != tx2mcu(fd_tty, (uint8_t *)s_rec, strlen(s_rec))) {
                         printf("mcu update[%s]: %s failure to tx s-rec %s\n", __func__, tty_n, strerror(errno));
                         break;
@@ -943,7 +942,8 @@ int main(int argc, char **argv)
                     if (err < 0) {
                         printf("mcu update[%s]: mcu don't respond on tx s-rec %s\n", __func__, s_rec);
                     } else if (1 == err) {
-                        printf("mcu update[%s]: mcu not ready\n", __func__);
+                        usleep(200*1000);
+                        printf("mcu update[%s]: mcu not ready for s-rec %s\n", __func__, s_rec);
                     }
                 } while (1 == err);
 

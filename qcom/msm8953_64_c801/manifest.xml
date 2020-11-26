@@ -249,6 +249,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IUimRemoteServiceClient</name>
             <instance>uimRemoteClient0</instance>
+            <instance>uimRemoteClient1</instance>
         </interface>
     </hal>
     <!-- RIL UIM REMOTE SERVER -->
@@ -259,6 +260,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IUimRemoteServiceServer</name>
             <instance>uimRemoteServer0</instance>
+            <instance>uimRemoteServer1</instance>
         </interface>
     </hal>
     <!-- RIL UIM LPA -->
@@ -269,6 +271,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IUimLpa</name>
             <instance>UimLpa0</instance>
+            <instance>UimLpa1</instance>
         </interface>
     </hal>
     <!-- RIL UIM -->
@@ -279,6 +282,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <interface>
             <name>IUim</name>
             <instance>Uim0</instance>
+            <instance>Uim1</instance>
         </interface>
     </hal>
     <!-- Data Link Latency -->
@@ -438,6 +442,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            <interface>
                <name>IImsRadio</name>
                <instance>imsradio0</instance>
+               <instance>imsradio1</instance>
            </interface>
     </hal>
     <hal format="hidl">
@@ -447,6 +452,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            <interface>
                <name>IQtiOemHook</name>
                <instance>oemhook0</instance>
+               <instance>oemhook1</instance>
            </interface>
     </hal>
     <!-- Alarm HAL service -->
@@ -476,7 +482,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <fqname>@1.1::ICryptoFactory/widevine</fqname>
         <fqname>@1.1::IDrmFactory/widevine</fqname>
     </hal>
-    <!--hal format="hidl">
+    <hal format="hidl">
         <name>android.hardware.nfc</name>
         <transport>hwbinder</transport>
         <version>1.1</version>
@@ -493,7 +499,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>INqNfc</name>
             <instance>default</instance>
         </interface>
-    </hal-->
+    </hal>
    <!-- IMS UCE Service -->
    <hal format="hidl">
        <name>com.qualcomm.qti.uceservice</name>
@@ -673,23 +679,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </interface>
     </hal>
     <!-- improveTouch Service-->
-    <!--hal format="hidl">
+    <hal format="hidl">
         <name>vendor.qti.hardware.improvetouch.touchcompanion</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
             <name>ITouchCompanion</name>
             <instance>TouchCompanionService</instance>
-        </interface>
-    </hal-->
-
-    <hal format="hidl">
-        <name>vendor.qti.hardware.fm</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IFmHci</name>
-            <instance>default</instance>
         </interface>
     </hal>
 </manifest>
